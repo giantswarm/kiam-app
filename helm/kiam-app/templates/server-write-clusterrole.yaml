@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: {{ .Values.server.name }}-write
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.server.name }}
+    giantswarm.io/service-type: "managed"
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch

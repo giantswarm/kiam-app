@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.agent.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.agent.name }}
+    giantswarm.io/service-type: "managed"
+  annotations:
+    {{- if .Values.agent.prometheus.scrape }}
+    prometheus.io/scrape: "true"
+    prometheus.io/port: {{ .Values.agent.prometheus.port | quote }}
+    {{- end }}
+spec:
+  clusterIP: None
+  selector:
+    app: {{ .Values.agent.name }}
+  ports:
+    - name: metrics
+      port: {{ .Values.agent.prometheus.port }}
+      targetPort: {{ .Values.agent.prometheus.port }}
+      protocol: TCP

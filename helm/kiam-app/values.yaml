@@ -1,0 +1,72 @@
+# Default values for external-dns-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+name: kiam
+namespace: kube-system
+
+userID: 65534
+groupID: 65534
+
+agent:
+  name: kiam-agent
+
+  tlsSecret: agent-tls
+  tlsCerts:
+    certFileName: tls.crt
+    keyFileName: tls.key
+    caFileName: ca.crt
+
+  host:
+    port: 8181
+    interface: cali+
+
+  gatewayTimeoutCreation: 50ms
+
+  prometheus:
+    scrape: true
+    port: 9620
+    syncInterval: 5s
+
+  resources:
+    limits:
+      cpu: 50m
+      memory: 50Mi
+    requests:
+      cpu: 50m
+      memory: 50Mi
+
+server:
+  name: kiam-server
+
+  gatewayTimeoutCreation: 50ms
+
+  iam:
+    managed: true
+    # ues only if not managed
+    assumeRoleARN: ""
+
+  tlsSecret: server-tls
+  tlsCerts:
+    certFileName: tls.crt
+    keyFileName: tls.key
+    caFileName: ca.crt
+
+  probes:
+    serverAddress: 127.0.0.1
+
+  prometheus:
+    scrape: true
+    port: 9620
+    syncInterval: 5s
+
+  service:
+    port: 443
+    targetPort: 443
+
+  sessionDuration: 15m
+
+image:
+  repository: quay.io/giantswarm/kiam
+  tag: v3.4
+  pullPolicy: IfNotPresent
