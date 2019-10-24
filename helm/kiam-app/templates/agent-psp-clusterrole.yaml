@@ -2,9 +2,10 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
   name: {{ .Values.agent.name }}-psp-use
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Values.agent.name }}
+    app: {{ .Values.name }}
+    component: {{ .Values.agent.name }}
     giantswarm.io/service-type: "managed"
 rules:
 - apiGroups:

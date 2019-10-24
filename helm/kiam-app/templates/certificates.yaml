@@ -1,0 +1,54 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  name: {{ .Values.name }}-selfsigning-issuer
+spec:
+  selfSigned: {}
+
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: {{ .Values.name }}-ca
+spec:
+  secretName: {{ .Values.name }}-ca-tls
+  commonName: {{ .Values.name }}
+  isCA: true
+  issuerRef:
+    name: {{ .Values.name }}-selfsigning-issuer
+
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  name: {{ .Values.name }}-ca-issuer
+spec:
+  ca:
+    secretName: {{ .Values.name }}-ca-tls
+
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: {{ .Values.agent.name }}
+spec:
+  secretName: {{ .Values.agent.name }}-tls
+  commonName: {{ .Values.agent.name }}
+  issuerRef:
+    name: {{ .Values.name }}-ca-issuer
+
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: {{ .Values.server.name }}
+spec:
+  secretName: {{ .Values.server.name }}-tls
+  commonName: {{ .Values.server.name }}
+  issuerRef:
+    name: {{ .Values.name }}-ca-issuer
+  dnsNames:
+  - "localhost"
+  - "{{ .Values.server.name }}"
+  ipAddresses:
+  - "127.0.0.1"

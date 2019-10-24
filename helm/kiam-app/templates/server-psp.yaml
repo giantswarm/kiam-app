@@ -2,6 +2,11 @@ apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: {{ .Values.server.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.name }}
+    component: {{ .Values.server.name }}
+    giantswarm.io/service-type: "managed"
 spec:
   privileged: false
   allowPrivilegeEscalation: false

@@ -2,9 +2,10 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
   name: {{ .Values.server.name }}-read
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Values.server.name }}
+    app: {{ .Values.name }}
+    component: {{ .Values.server.name }}
     giantswarm.io/service-type: "managed"
 rules:
   - apiGroups:

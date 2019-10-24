@@ -1,10 +1,11 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ .Values.server.name }}
-  namespace: {{ .Values.namespace }}
+  name: {{ .Values.server.name }}-psp-use
+  namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Values.server.name }}
+    app: {{ .Values.name }}
+    component: {{ .Values.server.name }}
     giantswarm.io/service-type: "managed"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -12,5 +13,5 @@ roleRef:
   name: {{ .Values.server.name }}-psp-use
 subjects:
 - kind: ServiceAccount
-  name: {{ template "kiam.serviceAccountName.server" . }}
-  namespace: {{ .Values.namespace }}
+  name: {{ .Values.server.name }}
+  namespace: {{ .Release.Namespace }}

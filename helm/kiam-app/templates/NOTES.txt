@@ -1,6 +1,6 @@
 To verify that kiam has started, run:
 
-  kubectl --namespace={{ .Release.Namespace }} get pods -l "app={{ template "kiam.name" . }},release={{ .Release.Name }}"
+  kubectl --namespace={{ .Release.Namespace }} get pods -l "release={{ .Values.name }}"
 
 Step1 : Add an annotation to your namespace as below:
 ~~~

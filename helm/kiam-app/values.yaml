@@ -3,15 +3,17 @@
 # Declare variables to be passed into your templates.
 
 name: kiam
-namespace: kube-system
 
-userID: 65534
-groupID: 65534
+clusterID: en2jo
 
 agent:
   name: kiam-agent
 
-  tlsSecret: agent-tls
+  # agent is running as root as it needs to update iptables
+  userID: 0
+  groupID: 0
+
+  tlsSecret: kiam-agent-tls
   tlsCerts:
     certFileName: tls.crt
     keyFileName: tls.key
@@ -21,7 +23,10 @@ agent:
     port: 8181
     interface: cali+
 
-  gatewayTimeoutCreation: 50ms
+  gatewayTimeoutCreation: 200ms
+
+  log:
+    level: info
 
   prometheus:
     scrape: true
@@ -39,14 +44,20 @@ agent:
 server:
   name: kiam-server
 
-  gatewayTimeoutCreation: 50ms
+  userID: 65534
+  groupID: 65534
+
+  gatewayTimeoutCreation: 200ms
 
   iam:
     managed: true
     # ues only if not managed
     assumeRoleARN: ""
 
-  tlsSecret: server-tls
+  cache:
+    syncInterval: 1m
+
+  tlsSecret: kiam-server-tls
   tlsCerts:
     certFileName: tls.crt
     keyFileName: tls.key
@@ -55,14 +66,17 @@ server:
   probes:
     serverAddress: 127.0.0.1
 
+  log:
+    level: info
+
   prometheus:
     scrape: true
     port: 9620
     syncInterval: 5s
 
   service:
-    port: 443
-    targetPort: 443
+    port: 6443
+    targetPort: 6443
 
   sessionDuration: 15m
 
