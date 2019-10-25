@@ -1,10 +1,15 @@
-# Default values for external-dns-chart.
+# Default values for kiam-chart.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 name: kiam
 
+# clusterID is dynamic environment value, calculated after cluster creation
+# applies only to Giant Swarm clusters
 clusterID: en2jo
+# provider is dynamic environment value, which comes from application catalog configuration
+# applies only to Giant Swarm clusters
+provider: aws
 
 agent:
   name: kiam-agent
