@@ -12,5 +12,4 @@ Parameter | Description | Default
 `clusterID` | Cluster identifier. Applies only to Giant Swarm managed clusters | 'testid'
 `provider` | Provider identifier (`aws`/`azure`/`kvm`). `kiam` applies only to `aws` privder | 'aws'
 `iam.managed` | If `true` - app will use precreated IAM role in Giant Swarm cluster | `true`
-`iam.managed` | If `true` - app will use precreated IAM role in Giant Swarm cluster | `true`
 `iam.assumeRoleARN` | ARN of the role to assume if `iam.managed` is false | ""
