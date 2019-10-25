@@ -24,3 +24,18 @@ Deployment to Tenant Clusters is handled by [app-operator](https://github.com/gi
 ## Configuration
 
 Configuration options are documented in [Configuration.md](helm/kiam-app/Configuration.md) document.
+
+## Release Process
+
+* Ensure CHANGELOG.md is up to date.
+* Create a new GitHub release with the version e.g. `v0.1.0` and link the
+changelog entry.
+* This will push a new git tag and trigger a new tarball to be pushed to the
+[default-catalog].  
+* Update [cluster-operator] with the new version.
+
+[app-operator]: https://github.com/giantswarm/app-operator
+[cluster-operator]: https://github.com/giantswarm/cluster-operator
+[default-catalog]: https://github.com/giantswarm/default-catalog
+[default-test-catalog]: https://github.com/giantswarm/default-test-catalog
+[kiam]: https://github.com/uswitch/kiam
