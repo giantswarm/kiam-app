@@ -1,0 +1,92 @@
+# Default values for kiam-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+name: kiam
+
+# clusterID is dynamic environment value, calculated after cluster creation
+# applies only to Giant Swarm clusters
+clusterID: en2jo
+# provider is dynamic environment value, which comes from application catalog configuration
+# applies only to Giant Swarm clusters
+provider: aws
+
+agent:
+  name: kiam-agent
+
+  # agent is running as root as it needs to update iptables
+  userID: 0
+  groupID: 0
+
+  tlsSecret: kiam-agent-tls
+  tlsCerts:
+    certFileName: tls.crt
+    keyFileName: tls.key
+    caFileName: ca.crt
+
+  host:
+    port: 8181
+    interface: cali+
+
+  gatewayTimeoutCreation: 200ms
+
+  log:
+    level: info
+
+  prometheus:
+    scrape: true
+    port: 9620
+    syncInterval: 5s
+
+  resources:
+    limits:
+      cpu: 50m
+      memory: 50Mi
+    requests:
+      cpu: 50m
+      memory: 50Mi
+
+server:
+  name: kiam-server
+
+  userID: 65534
+  groupID: 65534
+
+  gatewayTimeoutCreation: 200ms
+
+  iam:
+    managed: true
+    # ues only if not managed
+    assumeRoleARN: ""
+
+  cache:
+    syncInterval: 1m
+
+  tlsSecret: kiam-server-tls
+  tlsCerts:
+    certFileName: tls.crt
+    keyFileName: tls.key
+    caFileName: ca.crt
+
+  probes:
+    serverAddress: 127.0.0.1
+
+  log:
+    level: info
+
+  prometheus:
+    scrape: true
+    port: 9620
+    syncInterval: 5s
+
+  service:
+    port: 6443
+    targetPort: 6443
+
+  sessionDuration: 15m
+
+image:
+  registry: quay.io
+  name: giantswarm/kiam
+  tag: v3.4
+  pullPolicy: IfNotPresent

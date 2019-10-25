@@ -1,0 +1,22 @@
+# Default values for kiam-namespace-annotate chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+name: kiam-namespace-annotation
+namespace: kube-system
+
+userID: 1000
+groupID: 1000
+
+image:
+  registry: quay.io
+  name: giantswarm/docker-kubectl
+  tag: latest
+
+resources:
+  limits:
+    cpu: 50m
+    memory: 75Mi
+  requests:
+    cpu: 50m
+    memory: 75Mi

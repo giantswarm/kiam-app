@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ .Values.server.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.name }}
+    component: {{ .Values.server.name }}
+    giantswarm.io/service-type: "managed"
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+      component: {{ .Values.server.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+        component: {{ .Values.server.name }}
+        giantswarm.io/service-type: "managed"
+    spec:
+      serviceAccountName: {{ .Values.server.name }}
+      securityContext:
+        runAsUser: {{ .Values.server.userID }}
+        runAsGroup: {{ .Values.server.groupID }}
+        fsGroup: {{ .Values.server.groupID }}
+      hostNetwork: false
+      nodeSelector:
+        kubernetes.io/role: master
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      volumes:
+        - name: ssl-certs
+          hostPath:
+            path: /usr/share/ca-certificates
+        - name: tls
+          secret:
+            secretName: {{ .Values.server.tlsSecret }}
+      priorityClassName: giantswarm-critical
+      containers:
+        - name: {{ .Values.server.name }}
+          image: "{{ .Values.image.registry }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /kiam
+            - server
+          args:
+            - --json-log
+            - --level={{ .Values.server.log.level }}
+            - --bind=0.0.0.0:{{ .Values.server.service.targetPort }}
+            - --cert=/etc/kiam/tls/{{ .Values.server.tlsCerts.certFileName }}
+            - --key=/etc/kiam/tls/{{ .Values.server.tlsCerts.keyFileName }}
+            - --ca=/etc/kiam/tls/{{ .Values.server.tlsCerts.caFileName }}
+            - --role-base-arn-autodetect
+            {{- if .Values.server.iam.managed }}
+            - --assume-role-arn={{ .Values.clusterID }}-IAMManager-Role
+            {{- else }}
+            - --assume-role-arn={{ .Values.iam.assumeRoleARN }}
+            {{- end }}
+            - --session-duration={{ .Values.server.sessionDuration }}
+            - --sync={{ .Values.server.cache.syncInterval }}
+            {{- if .Values.server.prometheus.scrape }}
+            - --prometheus-listen-addr=0.0.0.0:{{ .Values.server.prometheus.port }}
+            - --prometheus-sync-interval={{ .Values.server.prometheus.syncInterval }}
+            {{- end }}
+          volumeMounts:
+            - mountPath: /etc/ssl/certs
+              name: ssl-certs
+              readOnly: true
+            - mountPath: /etc/kiam/tls
+              name: tls
+          livenessProbe:
+            exec:
+              command:
+                - /kiam
+                - health
+                - --cert=/etc/kiam/tls/{{ .Values.server.tlsCerts.certFileName }}
+                - --key=/etc/kiam/tls/{{ .Values.server.tlsCerts.keyFileName }}
+                - --ca=/etc/kiam/tls/{{ .Values.server.tlsCerts.caFileName }}
+                - --server-address={{ .Values.server.probes.serverAddress }}:{{ .Values.server.service.targetPort }}
+                - --server-address-refresh=2s
+                - --timeout=5s
+                - --gateway-timeout-creation={{ .Values.server.gatewayTimeoutCreation }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - /kiam
+                - health
+                - --cert=/etc/kiam/tls/{{ .Values.server.tlsCerts.certFileName }}
+                - --key=/etc/kiam/tls/{{ .Values.server.tlsCerts.keyFileName }}
+                - --ca=/etc/kiam/tls/{{ .Values.server.tlsCerts.caFileName }}
+                - --server-address={{ .Values.server.probes.serverAddress }}:{{ .Values.server.service.targetPort }}
+                - --server-address-refresh=2s
+                - --timeout=5s
+                - --gateway-timeout-creation={{ .Values.server.gatewayTimeoutCreation }}
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 10
+          resources:
+{{ toYaml .Values.server.resources | indent 12 }}

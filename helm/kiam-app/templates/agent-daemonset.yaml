@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ .Values.agent.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.name }}
+    component: {{ .Values.agent.name }}
+    giantswarm.io/service-type: "managed"
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+      component: {{ .Values.agent.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+        component: {{ .Values.agent.name }}
+        giantswarm.io/service-type: "managed"
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      serviceAccountName: {{ .Values.agent.name }}
+      volumes:
+        - name: tls
+          secret:
+            secretName: {{ .Values.agent.tlsSecret }}
+        - name: xtables
+          hostPath:
+            path: /run/xtables.lock
+            type: FileOrCreate
+      priorityClassName: giantswarm-critical
+      containers:
+        - name: {{ .Values.agent.name }}
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+          image: "{{ .Values.image.registry }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /kiam
+            - agent
+          args:
+            - --iptables
+            - --host-interface={{ .Values.agent.host.interface }}
+            - --json-log
+            - --level={{ .Values.agent.log.level }}
+            - --port={{ .Values.agent.host.port }}
+            - --cert=/etc/kiam/tls/{{ .Values.agent.tlsCerts.certFileName }}
+            - --key=/etc/kiam/tls/{{ .Values.agent.tlsCerts.keyFileName }}
+            - --ca=/etc/kiam/tls/{{ .Values.agent.tlsCerts.caFileName }}
+            - --server-address={{ .Values.server.name }}:{{ .Values.server.service.port }}
+            {{- if .Values.agent.prometheus.scrape }}
+            - --prometheus-listen-addr=0.0.0.0:{{ .Values.agent.prometheus.port }}
+            - --prometheus-sync-interval={{ .Values.agent.prometheus.syncInterval }}
+            {{- end }}
+            - --gateway-timeout-creation={{ .Values.agent.gatewayTimeoutCreation }}
+          env:
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          volumeMounts:
+            - mountPath: /etc/kiam/tls
+              name: tls
+            - mountPath: /var/run/xtables.lock
+              name: xtables
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: {{ .Values.agent.host.port }}
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          resources:
+{{ toYaml .Values.agent.resources | indent 12 }}

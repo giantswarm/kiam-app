@@ -1,0 +1,38 @@
+version: 2.1
+orbs:
+  architect: giantswarm/architect@0.4.3
+
+jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+
+      - run:
+          name: Get architect binary
+          command: |
+            wget -q $(curl -sS -H "Authorization: token $RELEASE_TOKEN" https://api.github.com/repos/giantswarm/architect/releases/latest | grep browser_download_url | head -n 1 | cut -d '"' -f 4)
+            chmod +x ./architect
+            ./architect version
+      - run: ./architect build
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./architect
+
+workflows:
+  version: 2
+  build_e2e:
+    jobs:
+      - build
+
+      - architect/push-to-app-catalog:
+          name: "package and push kiam-app chart"
+          app_catalog: "default-catalog"
+          app_catalog_test: "default-test-catalog"
+          chart: "kiam-app"
+          # Trigger job on git tag.
+          filters:
+            tags:
+              only: /^v.*/
