@@ -1,7 +1,7 @@
 apiVersion: v1
 name: kiam-app
 namespace: kube-system
-version: 4.0.0
+version: [[ .Version ]]
 appVersion: 3.4
 description: Integrate AWS IAM with Kubernetes
 home: https://github.com/uswitch/kiam
