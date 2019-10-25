@@ -1,0 +1,39 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ .Values.server.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.name }}
+    component: {{ .Values.server.name }}
+    giantswarm.io/service-type: "managed"
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ .Values.server.name }}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - ports:
+    - port: {{ .Values.server.service.targetPort }}
+      protocol: TCP
+    from:
+    - ipBlock:
+        cidr: 10.0.0.0/8
+    - ipBlock:
+        cidr: 172.16.0.0/12
+    - ipBlock:
+        cidr: 192.168.0.0/16
+  - ports:
+    - port: {{ .Values.server.prometheus.port }}
+      protocol: TCP
+    from:
+    - ipBlock:
+        cidr: 10.0.0.0/8
+    - ipBlock:
+        cidr: 172.16.0.0/12
+    - ipBlock:
+        cidr: 192.168.0.0/16
+  egress:
+  - {}
