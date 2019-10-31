@@ -6,7 +6,7 @@ name: kiam
 
 # clusterID is dynamic environment value, calculated after cluster creation
 # applies only to Giant Swarm clusters
-clusterID: en2jo
+clusterID: uun5a
 # provider is dynamic environment value, which comes from application catalog configuration
 # applies only to Giant Swarm clusters
 provider: aws
@@ -28,7 +28,7 @@ agent:
     port: 8181
     interface: cali+
 
-  gatewayTimeoutCreation: 200ms
+  gatewayTimeoutCreation: 300ms
 
   log:
     level: info
@@ -52,7 +52,7 @@ server:
   userID: 65534
   groupID: 65534
 
-  gatewayTimeoutCreation: 200ms
+  gatewayTimeoutCreation: 300ms
 
   iam:
     managed: true
