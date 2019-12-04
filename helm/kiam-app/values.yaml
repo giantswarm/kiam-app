@@ -28,7 +28,7 @@ agent:
     port: 8181
     interface: cali+
 
-  gatewayTimeoutCreation: 300ms
+  gatewayTimeoutCreation: 500ms
 
   log:
     level: info
@@ -52,7 +52,7 @@ server:
   userID: 65534
   groupID: 65534
 
-  gatewayTimeoutCreation: 300ms
+  gatewayTimeoutCreation: 500ms
 
   iam:
     managed: true
