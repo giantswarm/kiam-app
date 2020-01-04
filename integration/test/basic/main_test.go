@@ -8,7 +8,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/giantswarm/appcatalog"
 	e2esetup "github.com/giantswarm/e2esetup/chart"
 	"github.com/giantswarm/e2esetup/chart/env"
 	"github.com/giantswarm/e2etests/basicapp"
@@ -17,7 +16,6 @@ import (
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/helm/pkg/helm"
 )
 
 const (
@@ -144,41 +142,8 @@ func TestMain(m *testing.M) {
 		v, err := e2esetup.Setup(ctx, m, c)
 		if err != nil {
 			l.LogCtx(ctx, "level", "error", "message", "e2e test failed", "stack", microerror.Stack(err))
-			os.Exit(v)
-		}
-
-		err = installCertManager(ctx, helmClient, l)
-		if err != nil {
-			l.LogCtx(ctx, "level", "error", "message", "installing cert-manager failed", "stack", microerror.Stack(err))
-			v = -1
 		}
 
 		os.Exit(v)
 	}
-}
-
-func installCertManager(ctx context.Context, helmClient helmclient.Interface, logger micrologger.Logger) error {
-	tarballURL, err := appcatalog.GetLatestVersion(ctx, defaultCatalogURL, certManagerAppName)
-	if err != nil {
-		return microerror.Mask(err)
-	}
-
-	tarballPath, err := helmClient.PullChartTarball(ctx, tarballURL)
-	if err != nil {
-		return microerror.Mask(err)
-	}
-
-	defer func() {
-		err := os.Remove(tarballPath)
-		if err != nil {
-			logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("deletion of %#q failed", tarballPath), "stack", microerror.Stack(err))
-		}
-	}()
-
-	err = helmClient.InstallReleaseFromTarball(ctx, tarballPath, metav1.NamespaceSystem, helm.ReleaseName(certManagerAppName))
-	if err != nil {
-		return microerror.Mask(err)
-	}
-
-	return nil
 }
