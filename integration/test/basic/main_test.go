@@ -22,7 +22,7 @@ import (
 
 const (
 	certManagerAppName = "cert-manager-app"
-	defaultCatalogURL  = "https://giantswarm.github.com/default-catalog"
+	defaultCatalogURL  = "https://giantswarm.github.io/default-catalog"
 	chartName          = "kiam"
 	envVarTarballURL   = "E2E_TARBALL_URL"
 )
