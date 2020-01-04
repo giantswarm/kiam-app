@@ -156,7 +156,7 @@ func TestMain(m *testing.M) {
 	}
 }
 
-func installCertManager(ctx context.Context, helmClient helmclient.Interface) (int, error) {
+func installCertManager(ctx context.Context, helmClient helmclient.Interface) error {
 	tarballURL, err := appcatalog.GetLatestVersion(ctx, defaultCatalogURL, certManagerAppName)
 	if err != nil {
 		return microerror.Mask(err)
