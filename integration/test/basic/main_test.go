@@ -157,7 +157,7 @@ func TestMain(m *testing.M) {
 	}
 }
 
-func installCertManager(ctx context.Context, helmClient helmclient.Interface) error {
+func installCertManager(ctx context.Context, helmClient helmclient.Interface, logger micrologger.Logger) error {
 	tarballURL, err := appcatalog.GetLatestVersion(ctx, defaultCatalogURL, certManagerAppName)
 	if err != nil {
 		return microerror.Mask(err)
@@ -168,10 +168,10 @@ func installCertManager(ctx context.Context, helmClient helmclient.Interface) er
 		return microerror.Mask(err)
 	}
 
-	defer func() error {
+	defer func() {
 		err := os.Remove(tarballPath)
 		if err != nil {
-			return microerror.Mask(err)
+			logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("deletion of %#q failed", tarballPath), "stack", microerror.Stack(err))
 		}
 	}()
 
