@@ -104,7 +104,7 @@ func init() {
 				URL:       tarballURL,
 			},
 			ChartResources: basicapp.ChartResources{
-				DaemonSets: []basicapp.DaemonSets{
+				DaemonSets: []basicapp.DaemonSet{
 					{
 						Name:      agentName,
 						Namespace: metav1.NamespaceSystem,
