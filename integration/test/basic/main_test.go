@@ -19,10 +19,12 @@ import (
 )
 
 const (
+	agentName          = "kiam-agent"
 	certManagerAppName = "cert-manager-app"
 	defaultCatalogURL  = "https://giantswarm.github.io/default-catalog"
 	chartName          = "kiam"
 	envVarTarballURL   = "E2E_TARBALL_URL"
+	serverName         = "kiam-server"
 )
 
 var (
@@ -102,20 +104,31 @@ func init() {
 				URL:       tarballURL,
 			},
 			ChartResources: basicapp.ChartResources{
-				Deployments: []basicapp.Deployment{
+				DaemonSets: []basicapp.DaemonSets{
 					{
-						Name:      chartName,
+						Name:      agentName,
 						Namespace: metav1.NamespaceSystem,
-						DeploymentLabels: map[string]string{
+						Labels: map[string]string{
 							"app":                        chartName,
+							"component":                  agentName,
 							"giantswarm.io/service-type": "managed",
 						},
 						MatchLabels: map[string]string{
-							"app": chartName,
+							"app":       chartName,
+							"component": agentName,
 						},
-						PodLabels: map[string]string{
+					},
+					{
+						Name:      serverName,
+						Namespace: metav1.NamespaceSystem,
+						Labels: map[string]string{
 							"app":                        chartName,
+							"component":                  serverName,
 							"giantswarm.io/service-type": "managed",
+						},
+						MatchLabels: map[string]string{
+							"app":       chartName,
+							"component": serverName,
 						},
 					},
 				},
