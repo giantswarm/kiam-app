@@ -49,7 +49,7 @@ func installCertManager(ctx context.Context, helmClient helmclient.Interface, lo
 		}
 	}()
 
-	err = helmClient.InstallReleaseFromTarball(ctx, tarballPath, metav1.NamespaceSystem, helm.ReleaseName(certManagerAppName), helm.ValueOverrides("{}"))
+	err = helmClient.InstallReleaseFromTarball(ctx, tarballPath, metav1.NamespaceSystem, helm.ReleaseName(certManagerAppName), helm.ValueOverrides([]byte("{}")))
 	if err != nil {
 		return microerror.Mask(err)
 	}
