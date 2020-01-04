@@ -168,7 +168,7 @@ func installCertManager(ctx context.Context, helmClient helmclient.Interface) er
 		return microerror.Mask(err)
 	}
 
-	defer func() {
+	defer func() error {
 		err := os.Remove(tarballPath)
 		if err != nil {
 			return microerror.Mask(err)
