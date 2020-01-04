@@ -214,6 +214,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:2e3b996b387af3e4a3346613452f61d03665bcf0db9d1fe0b1220e61d8109917"
+  name = "github.com/giantswarm/appcatalog"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "154ee146b92d532611962d666b82c91ee6e885a0"
+
+[[projects]]
+  branch = "master"
   digest = "1:0dc70d5c96ccd9ef24d12f7c222447425447f7a2ec72556f2479137fe72f5476"
   name = "github.com/giantswarm/backoff"
   packages = ["."]
@@ -1514,11 +1522,13 @@
   analyzer-version = 1
   input-imports = [
     "github.com/docker/distribution/reference",
+    "github.com/giantswarm/appcatalog",
     "github.com/giantswarm/e2esetup/chart",
     "github.com/giantswarm/e2esetup/chart/env",
     "github.com/giantswarm/e2etests/basicapp",
     "github.com/giantswarm/helmclient",
     "github.com/giantswarm/k8sclient",
+    "github.com/giantswarm/microerror",
     "github.com/giantswarm/micrologger",
     "k8s.io/apimachinery/pkg/apis/meta/v1",
     "k8s.io/apiserver/pkg/endpoints/request",

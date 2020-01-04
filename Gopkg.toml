@@ -38,6 +38,10 @@ required = [
 
 [[constraint]]
   branch = "master"
+  name = "github.com/giantswarm/appcatalog"
+
+[[constraint]]
+  branch = "master"
   name = "github.com/giantswarm/e2esetup"
 
 [[constraint]]
@@ -47,6 +51,14 @@ required = [
 [[constraint]]
   branch = "master"
   name = "github.com/giantswarm/helmclient"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/giantswarm/microerror"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/giantswarm/micrologger"
 
 [[constraint]]
   branch = "master"
