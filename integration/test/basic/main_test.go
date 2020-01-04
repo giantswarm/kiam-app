@@ -18,8 +18,10 @@ import (
 )
 
 const (
-	chartName        = "kiam"
-	envVarTarballURL = "E2E_TARBALL_URL"
+	certManagerAppName = "cert-manager-app"
+	defaultCatalogURL  = "https://giantswarm.github.com/default-catalog"
+	chartName          = "kiam"
+	envVarTarballURL   = "E2E_TARBALL_URL"
 )
 
 var (
@@ -138,9 +140,42 @@ func TestMain(m *testing.M) {
 
 		v, err := e2esetup.Setup(ctx, m, c)
 		if err != nil {
-			l.LogCtx(ctx, "level", "error", "message", "e2e test failed", "stack", fmt.Sprintf("%#v\n", err))
+			l.LogCtx(ctx, "level", "error", "message", "e2e test failed", "stack", microerror.Stack(err))
+			os.Exit(v)
+		}
+
+		err := installCertManager(ctx, helmClient)
+		if err != nil {
+			l.LogCtx(ctx, "level", "error", "message", "installing cert-manager failed", "stack", microerror.Stack(err))
+			v = -1
 		}
 
 		os.Exit(v)
 	}
+}
+
+func installCertManager(ctx context.Context, helmClient helmclient.Interface) (int, error) {
+	tarballURL, err := appcatalog.GetLatestVersion(ctx, defaultCatalogURL, certManagerAppName)
+	if err != nil {
+		return microerror.Mask(err)
+	}
+
+	tarballPath, err := helmclient.PullChartTarball(ctx, tarballURL)
+	if err != nil {
+		return microerror.Mask(err)
+	}
+
+	defer func() {
+		err := os.Remove(tarballPath)
+		if err != nil {
+			return microerror.Mask(err)
+		}
+	}()
+
+	err = helmClient.InstallReleaseFromTarball(ctx, tarballPath, metav1.NamespaceSystem, certManagerAppName, helm.ValueOverrides("{}"))
+	if err != nil {
+		return microerror.Mask(err)
+	}
+
+	return nil
 }
