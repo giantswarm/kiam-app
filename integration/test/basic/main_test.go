@@ -147,7 +147,7 @@ func TestMain(m *testing.M) {
 			os.Exit(v)
 		}
 
-		err = installCertManager(ctx, helmClient)
+		err = installCertManager(ctx, helmClient, l)
 		if err != nil {
 			l.LogCtx(ctx, "level", "error", "message", "installing cert-manager failed", "stack", microerror.Stack(err))
 			v = -1
