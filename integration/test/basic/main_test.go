@@ -17,6 +17,7 @@ import (
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/helm/pkg/helm"
 )
 
 const (
@@ -146,7 +147,7 @@ func TestMain(m *testing.M) {
 			os.Exit(v)
 		}
 
-		err := installCertManager(ctx, helmClient)
+		err = installCertManager(ctx, helmClient)
 		if err != nil {
 			l.LogCtx(ctx, "level", "error", "message", "installing cert-manager failed", "stack", microerror.Stack(err))
 			v = -1
@@ -162,7 +163,7 @@ func installCertManager(ctx context.Context, helmClient helmclient.Interface) er
 		return microerror.Mask(err)
 	}
 
-	tarballPath, err := helmclient.PullChartTarball(ctx, tarballURL)
+	tarballPath, err := helmClient.PullChartTarball(ctx, tarballURL)
 	if err != nil {
 		return microerror.Mask(err)
 	}
@@ -174,7 +175,7 @@ func installCertManager(ctx context.Context, helmClient helmclient.Interface) er
 		}
 	}()
 
-	err = helmClient.InstallReleaseFromTarball(ctx, tarballPath, metav1.NamespaceSystem, certManagerAppName, helm.ValueOverrides("{}"))
+	err = helmClient.InstallReleaseFromTarball(ctx, tarballPath, metav1.NamespaceSystem, helm.ReleaseName(certManagerAppName))
 	if err != nil {
 		return microerror.Mask(err)
 	}

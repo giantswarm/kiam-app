@@ -1532,6 +1532,7 @@
     "github.com/giantswarm/micrologger",
     "k8s.io/apimachinery/pkg/apis/meta/v1",
     "k8s.io/apiserver/pkg/endpoints/request",
+    "k8s.io/helm/pkg/helm",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
