@@ -20,12 +20,12 @@ func TestHelm(t *testing.T) {
 	ctx := context.Background()
 
 	// Install cert-manager so kiam certs can be issued.
-	err := installCertManager(ctx, helmClient, logger)
+	err := installCertManager(ctx, helmClient, l)
 	if err != nil {
 		t.Fatalf("%#v", err)
 	}
 
-	err := ba.Test(context.Background())
+	err = ba.Test(context.Background())
 	if err != nil {
 		t.Fatalf("%#v", err)
 	}
