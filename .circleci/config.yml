@@ -80,7 +80,7 @@ workflows:
           app_catalog_test: "default-test-catalog"
           chart: "kiam-app"
           filters:
-            # Trigger the job also on git tag
+            # Trigger the job also on git tag.
             tags:
               only: /^v.*/
 
