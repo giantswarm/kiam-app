@@ -10,7 +10,8 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: {{ .Values.server.name }}
+      app: {{ .Values.name }}
+      component: {{ .Values.server.name }}
   policyTypes:
   - Ingress
   - Egress
