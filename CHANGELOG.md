@@ -7,12 +7,12 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [v1.0.4] 2020-01-27
 
-- Fixed hook deletion policy for sub chart to label kube-system namespace.
+- Fixed hook deletion policy for sub chart that labels kube-system namespace.
 
 ## [v1.0.3] 2020-01-17
 
 - Updated server network policy labels match server daemonset labels.
-- Fixed hooks for sub chart to label kube-system namespace.  
+- Fixed hooks for sub chart that labels kube-system namespace.  
 
 ## [v1.0.2] 2020-01-04
 
