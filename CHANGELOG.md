@@ -36,4 +36,6 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - `kiam` upstream helm chart `v3.4`
 
+[v1.0.4]: https://github.com/giantswarm/kiam-app/pull/12
+[v1.0.3]: https://github.com/giantswarm/kiam-app/pull/11
 [v1.0.2]: https://github.com/giantswarm/kiam-app/pull/8
