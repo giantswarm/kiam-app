@@ -87,5 +87,5 @@ server:
 image:
   registry: quay.io
   name: giantswarm/kiam
-  tag: v3.4
+  tag: v3.5
   pullPolicy: IfNotPresent
