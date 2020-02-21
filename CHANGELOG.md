@@ -30,18 +30,21 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - Updated manifests for Kubernetes 1.16.
 
-## v1.0.1
+## [v1.0.1] 2019-12-27
 
 ### Changed
 
 - Remove CPU limits.
 
-## v1.0.0
+## [v1.0.0] 2019-10-25
 
 ### Added
 
 - `kiam` upstream helm chart `v3.4`
 
-[v1.0.4]: https://github.com/giantswarm/kiam-app/pull/12
-[v1.0.3]: https://github.com/giantswarm/kiam-app/pull/11
-[v1.0.2]: https://github.com/giantswarm/kiam-app/pull/8
+[v1.1.0]: https://github.com/giantswarm/kiam-app/releases/tag/v1.1.0
+[v1.0.4]: https://github.com/giantswarm/kiam-app/releases/tag/v1.0.4
+[v1.0.3]: https://github.com/giantswarm/kiam-app/releases/tag/v1.0.3
+[v1.0.2]: https://github.com/giantswarm/kiam-app/releases/tag/v1.0.2
+[v1.0.1]: https://github.com/giantswarm/kiam-app/releases/tag/v1.0.1
+[v1.0.0]: https://github.com/giantswarm/kiam-app/releases/tag/v1.0.0
