@@ -9,7 +9,6 @@ userID: 1000
 groupID: 1000
 
 image:
-  registry: quay.io
   name: giantswarm/docker-kubectl
   tag: latest
 

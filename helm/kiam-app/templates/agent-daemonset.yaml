@@ -36,7 +36,7 @@ spec:
           securityContext:
             capabilities:
               add: ["NET_ADMIN"]
-          image: "{{ .Values.image.registry }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.global.image.registry }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - /kiam

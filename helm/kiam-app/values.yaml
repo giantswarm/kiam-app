@@ -85,7 +85,10 @@ server:
   sessionDuration: 15m
 
 image:
-  registry: quay.io
   name: giantswarm/kiam
   tag: v3.5
   pullPolicy: IfNotPresent
+
+global:
+  image:
+    registry: quay.io
