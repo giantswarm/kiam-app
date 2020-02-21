@@ -40,7 +40,7 @@ spec:
       priorityClassName: giantswarm-critical
       containers:
         - name: {{ .Values.server.name }}
-          image: "{{ .Values.image.registry }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.global.image.registry }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             - /kiam
