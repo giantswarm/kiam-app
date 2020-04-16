@@ -51,6 +51,9 @@ spec:
             - --key=/etc/kiam/tls/{{ .Values.agent.tlsCerts.keyFileName }}
             - --ca=/etc/kiam/tls/{{ .Values.agent.tlsCerts.caFileName }}
             - --server-address={{ .Values.server.name }}:{{ .Values.server.service.port }}
+            {{- if .Values.agent.whiteListRouteRegexp }}
+            - --whitelist-route-regexp={{ .Values.agent.whiteListRouteRegexp }}
+            {{- end }}
             {{- if .Values.agent.prometheus.scrape }}
             - --prometheus-listen-addr=0.0.0.0:{{ .Values.agent.prometheus.port }}
             - --prometheus-sync-interval={{ .Values.agent.prometheus.syncInterval }}
