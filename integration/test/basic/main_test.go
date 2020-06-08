@@ -24,7 +24,7 @@ const (
 	certManagerAppName = "cert-manager-app"
 	catalogURL         = "https://giantswarm.github.io/default-catalog"
 	testCatalogURL     = "https://giantswarm.github.io/default-test-catalog"
-	appName            = "kiam"
+	appName            = "kiam-app"
 	serverName         = "kiam-server"
 )
 
