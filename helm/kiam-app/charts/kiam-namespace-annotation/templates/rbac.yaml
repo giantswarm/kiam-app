@@ -14,7 +14,7 @@ rules:
   - ""
   resources:
   - namespaces
-  resourceName:
+  resourceNames:
   - kube-system
   verbs:
   - "get"

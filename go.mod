@@ -11,5 +11,4 @@ require (
 	github.com/giantswarm/microerror v0.2.0
 	github.com/giantswarm/micrologger v0.3.1
 	k8s.io/apimachinery v0.17.2
-	k8s.io/helm v2.16.7+incompatible
 )
