@@ -13,7 +13,6 @@ import (
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/helm/pkg/helm"
 )
 
 func TestHelm(t *testing.T) {
@@ -32,7 +31,7 @@ func TestHelm(t *testing.T) {
 }
 
 func installCertManager(ctx context.Context, helmClient helmclient.Interface, logger micrologger.Logger) error {
-	tarballURL, err := appcatalog.GetLatestChart(ctx, defaultCatalogURL, certManagerAppName)
+	tarballURL, err := appcatalog.GetLatestChart(ctx, catalogURL, certManagerAppName, "")
 	if err != nil {
 		return microerror.Mask(err)
 	}
@@ -45,11 +44,15 @@ func installCertManager(ctx context.Context, helmClient helmclient.Interface, lo
 	defer func() {
 		err := os.Remove(tarballPath)
 		if err != nil {
-			logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("deletion of %#q failed", tarballPath), "stack", microerror.Stack(err))
+			logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("deletion of %#q failed", tarballPath), "stack", microerror.JSON(err))
 		}
 	}()
 
-	err = helmClient.InstallReleaseFromTarball(ctx, tarballPath, metav1.NamespaceSystem, helm.ReleaseName(certManagerAppName), helm.ValueOverrides([]byte("{}")))
+	options := helmclient.InstallOptions{
+		ReleaseName: certManagerAppName,
+	}
+
+	err = helmClient.InstallReleaseFromTarball(ctx, tarballPath, metav1.NamespaceSystem, map[string]interface{}{}, options)
 	if err != nil {
 		return microerror.Mask(err)
 	}
