@@ -25,6 +25,7 @@ const (
 	catalogURL         = "https://giantswarm.github.io/default-catalog"
 	testCatalogURL     = "https://giantswarm.github.io/default-test-catalog"
 	appName            = "kiam-app"
+	name               = "kiam"
 	serverName         = "kiam-server"
 )
 
@@ -107,7 +108,7 @@ func init() {
 			Logger:     l,
 
 			App: basicapp.Chart{
-				Name:      appName,
+				Name:      name,
 				Namespace: metav1.NamespaceSystem,
 				URL:       tarballURL,
 			},
@@ -117,12 +118,12 @@ func init() {
 						Name:      agentName,
 						Namespace: metav1.NamespaceSystem,
 						Labels: map[string]string{
-							"app":                        appName,
+							"app":                        name,
 							"component":                  agentName,
 							"giantswarm.io/service-type": "managed",
 						},
 						MatchLabels: map[string]string{
-							"app":       appName,
+							"app":       name,
 							"component": agentName,
 						},
 					},
@@ -130,12 +131,12 @@ func init() {
 						Name:      serverName,
 						Namespace: metav1.NamespaceSystem,
 						Labels: map[string]string{
-							"app":                        appName,
+							"app":                        name,
 							"component":                  serverName,
 							"giantswarm.io/service-type": "managed",
 						},
 						MatchLabels: map[string]string{
-							"app":       appName,
+							"app":       name,
 							"component": serverName,
 						},
 					},
