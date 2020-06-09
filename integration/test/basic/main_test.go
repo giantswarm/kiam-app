@@ -24,7 +24,6 @@ const (
 	certManagerAppName = "cert-manager-app"
 	catalogURL         = "https://giantswarm.github.io/default-catalog"
 	testCatalogURL     = "https://giantswarm.github.io/default-test-catalog"
-	appName            = "kiam-app"
 	name               = "kiam"
 	serverName         = "kiam-server"
 )
@@ -43,7 +42,7 @@ func init() {
 
 	var latestRelease string
 	{
-		latestRelease, err = appcatalog.GetLatestVersion(ctx, catalogURL, appName)
+		latestRelease, err = appcatalog.GetLatestVersion(ctx, catalogURL, fmt.Sprintf("%s-app", name))
 		if err != nil {
 			panic(err.Error())
 		}
@@ -51,7 +50,7 @@ func init() {
 
 	{
 		version := fmt.Sprintf("%s-%s", latestRelease, env.CircleSHA())
-		tarballURL, err = appcatalog.NewTarballURL(testCatalogURL, appName, version)
+		tarballURL, err = appcatalog.NewTarballURL(testCatalogURL, fmt.Sprintf("%s-app", name), version)
 		if err != nil {
 			panic(err.Error())
 		}
