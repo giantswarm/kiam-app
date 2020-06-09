@@ -8,6 +8,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/giantswarm/appcatalog"
 	e2esetup "github.com/giantswarm/e2esetup/chart"
 	"github.com/giantswarm/e2esetup/chart/env"
 	"github.com/giantswarm/e2etests/basicapp"
@@ -21,9 +22,9 @@ import (
 const (
 	agentName          = "kiam-agent"
 	certManagerAppName = "cert-manager-app"
-	defaultCatalogURL  = "https://giantswarm.github.io/default-catalog"
-	chartName          = "kiam"
-	envVarTarballURL   = "E2E_TARBALL_URL"
+	catalogURL         = "https://giantswarm.github.io/default-catalog"
+	testCatalogURL     = "https://giantswarm.github.io/default-test-catalog"
+	name               = "kiam"
 	serverName         = "kiam-server"
 )
 
@@ -36,12 +37,22 @@ var (
 )
 
 func init() {
+	ctx := context.Background()
 	var err error
 
+	var latestRelease string
 	{
-		tarballURL = os.Getenv(envVarTarballURL)
-		if tarballURL == "" {
-			panic(fmt.Sprintf("env var '%s' must not be empty", envVarTarballURL))
+		latestRelease, err = appcatalog.GetLatestVersion(ctx, catalogURL, fmt.Sprintf("%s-app", name))
+		if err != nil {
+			panic(err.Error())
+		}
+	}
+
+	{
+		version := fmt.Sprintf("%s-%s", latestRelease, env.CircleSHA())
+		tarballURL, err = appcatalog.NewTarballURL(testCatalogURL, fmt.Sprintf("%s-app", name), version)
+		if err != nil {
+			panic(err.Error())
 		}
 	}
 
@@ -80,11 +91,8 @@ func init() {
 
 	{
 		c := helmclient.Config{
-			Logger:     l,
-			K8sClient:  k8sClients.K8sClient(),
-			RestConfig: k8sClients.RESTConfig(),
-
-			TillerNamespace: "giantswarm",
+			Logger:    l,
+			K8sClient: k8sClients,
 		}
 		helmClient, err = helmclient.New(c)
 		if err != nil {
@@ -99,7 +107,7 @@ func init() {
 			Logger:     l,
 
 			App: basicapp.Chart{
-				Name:      chartName,
+				Name:      name,
 				Namespace: metav1.NamespaceSystem,
 				URL:       tarballURL,
 			},
@@ -109,12 +117,12 @@ func init() {
 						Name:      agentName,
 						Namespace: metav1.NamespaceSystem,
 						Labels: map[string]string{
-							"app":                        chartName,
+							"app":                        name,
 							"component":                  agentName,
 							"giantswarm.io/service-type": "managed",
 						},
 						MatchLabels: map[string]string{
-							"app":       chartName,
+							"app":       name,
 							"component": agentName,
 						},
 					},
@@ -122,12 +130,12 @@ func init() {
 						Name:      serverName,
 						Namespace: metav1.NamespaceSystem,
 						Labels: map[string]string{
-							"app":                        chartName,
+							"app":                        name,
 							"component":                  serverName,
 							"giantswarm.io/service-type": "managed",
 						},
 						MatchLabels: map[string]string{
-							"app":       chartName,
+							"app":       name,
 							"component": serverName,
 						},
 					},
@@ -154,7 +162,7 @@ func TestMain(m *testing.M) {
 
 		v, err := e2esetup.Setup(ctx, m, c)
 		if err != nil {
-			l.LogCtx(ctx, "level", "error", "message", "e2e test failed", "stack", microerror.Stack(err))
+			l.LogCtx(ctx, "level", "error", "message", "e2e test failed", "stack", microerror.JSON(err))
 		}
 
 		os.Exit(v)
