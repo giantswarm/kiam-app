@@ -58,7 +58,7 @@ server:
 
   iam:
     managed: true
-    # ues only if not managed
+    # use only if not managed
     assumeRoleARN: ""
 
   cache:
@@ -95,3 +95,7 @@ image:
 global:
   image:
     registry: quay.io
+
+# placeholder, value taken from default-appcatalog-values.yaml
+kiam:
+  region: ""
