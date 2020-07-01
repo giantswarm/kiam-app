@@ -98,4 +98,4 @@ global:
 
 # placeholder, value taken from default-appcatalog-values.yaml
 kiam:
-  region: ""
+  region: eu-central-1
