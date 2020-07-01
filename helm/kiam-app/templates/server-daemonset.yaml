@@ -67,7 +67,7 @@ spec:
             - --region={{ .Values.kiam.region }}
           env:
             - name: AWS_REGION
-            - --region={{ .Values.kiam.region }}
+              value: {{ .Values.kiam.region }}
           volumeMounts:
             - mountPath: /etc/ssl/certs
               name: ssl-certs
