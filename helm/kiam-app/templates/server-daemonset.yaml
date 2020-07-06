@@ -64,6 +64,10 @@ spec:
             - --prometheus-listen-addr=0.0.0.0:{{ .Values.server.prometheus.port }}
             - --prometheus-sync-interval={{ .Values.server.prometheus.syncInterval }}
             {{- end }}
+            - --region={{ .Values.kiam.region }}
+          env:
+            - name: AWS_REGION
+              value: {{ .Values.kiam.region }}
           volumeMounts:
             - mountPath: /etc/ssl/certs
               name: ssl-certs
