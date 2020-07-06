@@ -11,6 +11,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - Set kiam region flag for STS endpoint
 
+### Changed
+
+- Upgrade architect-orb to 0.10.0
+
 ## [v1.2.2] 2020-04-17
 
 ### Added
