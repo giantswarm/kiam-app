@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [1.3.0] - 2020-07-06
+
 ### Added
 
 - Set kiam region flag for STS endpoint
@@ -77,8 +79,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - `kiam` upstream helm chart `v3.4`
 
-[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v1.2.2...HEAD
-
+[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/giantswarm/kiam-app/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/giantswarm/kiam-app/compare/tag/v1.2.2
 [1.2.1]: https://github.com/giantswarm/kiam-app/compare/tag/v1.2.1
 [1.2.0]: https://github.com/giantswarm/kiam-app/compare/tag/v1.2.0
