@@ -42,7 +42,7 @@ func init() {
 
 	var latestRelease string
 	{
-		latestRelease, err = appcatalog.GetLatestVersion(ctx, catalogURL, fmt.Sprintf("%s-app", name))
+		latestRelease, err = appcatalog.GetLatestVersion(ctx, catalogURL, fmt.Sprintf("%s-app", name), "")
 		if err != nil {
 			panic(err.Error())
 		}
