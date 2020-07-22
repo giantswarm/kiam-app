@@ -7,6 +7,9 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Added
+- Added worflows for automatic releases.
+
 ## [1.3.0] - 2020-07-06
 
 ### Added
