@@ -7,6 +7,11 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Change
+
+- Updated cert-manager API groups.
+- Use latest cert-manager in integration tests.
+
 ## [1.3.1] - 2020-07-23
 
 ### Added

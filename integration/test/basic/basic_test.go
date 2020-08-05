@@ -31,7 +31,7 @@ func TestHelm(t *testing.T) {
 }
 
 func installCertManager(ctx context.Context, helmClient helmclient.Interface, logger micrologger.Logger) error {
-	tarballURL, err := appcatalog.GetLatestChart(ctx, catalogURL, certManagerAppName, "0.9.0")
+	tarballURL, err := appcatalog.GetLatestChart(ctx, catalogURL, certManagerAppName, "")
 	if err != nil {
 		return microerror.Mask(err)
 	}
