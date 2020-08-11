@@ -3,7 +3,7 @@ module github.com/giantswarm/kiam-app
 go 1.14
 
 require (
-	github.com/giantswarm/appcatalog v0.2.6
+	github.com/giantswarm/appcatalog v0.2.7
 	github.com/giantswarm/e2esetup v0.3.0
 	github.com/giantswarm/e2etests v0.3.1
 	github.com/giantswarm/helmclient v1.0.3
