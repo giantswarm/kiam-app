@@ -13,7 +13,7 @@ import (
 	"github.com/giantswarm/e2esetup/chart/env"
 	"github.com/giantswarm/e2etests/basicapp"
 	"github.com/giantswarm/helmclient"
-	"github.com/giantswarm/k8sclient"
+	"github.com/giantswarm/k8sclient/v3/pkg/k8sclient"
 	"github.com/giantswarm/microerror"
 	"github.com/giantswarm/micrologger"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
