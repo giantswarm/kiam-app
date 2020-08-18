@@ -2,6 +2,9 @@ apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
   name: {{ .Values.name }}-selfsigning-issuer
+  labels:
+    app: {{ .Values.name | quote }}
+    {{- include "labels.common" . | nindent 4 }}
 spec:
   selfSigned: {}
 
@@ -10,6 +13,9 @@ apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
   name: {{ .Values.name }}-ca
+  labels:
+    app: {{ .Values.name | quote }}
+    {{- include "labels.common" . | nindent 4 }}
 spec:
   secretName: {{ .Values.name }}-ca-tls
   commonName: {{ .Values.name }}
@@ -22,6 +28,9 @@ apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
   name: {{ .Values.name }}-ca-issuer
+  labels:
+    app: {{ .Values.name | quote }}
+    {{- include "labels.common" . | nindent 4 }}
 spec:
   ca:
     secretName: {{ .Values.name }}-ca-tls
@@ -31,6 +40,8 @@ apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
   name: {{ .Values.agent.name }}
+  labels:
+    {{- include "labels.agent" . | nindent 4 }}
 spec:
   secretName: {{ .Values.agent.name }}-tls
   commonName: {{ .Values.agent.name }}
@@ -42,6 +53,8 @@ apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
   name: {{ .Values.server.name }}
+  labels:
+    {{- include "labels.server" . | nindent 4 }}
 spec:
   secretName: {{ .Values.server.name }}-tls
   commonName: {{ .Values.server.name }}

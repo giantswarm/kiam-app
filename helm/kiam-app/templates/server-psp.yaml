@@ -4,9 +4,7 @@ metadata:
   name: {{ .Values.server.name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Values.name }}
-    component: {{ .Values.server.name }}
-    giantswarm.io/service-type: "managed"
+    {{- include "labels.server" . | nindent 4 }}
 spec:
   privileged: false
   allowPrivilegeEscalation: false
