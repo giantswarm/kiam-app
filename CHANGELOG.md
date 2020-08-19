@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [1.4.1] - 2020-08-19
+
 ### Added
 
 - Added monitoring and common labels.
@@ -100,7 +102,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - `kiam` upstream helm chart `v3.4`
 
-[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v1.4.1...HEAD
+[1.4.1]: https://github.com/giantswarm/kiam-app/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/giantswarm/kiam-app/compare/v1.3.1...v1.4.0
 [1.3.1]: https://github.com/giantswarm/kiam-app/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/giantswarm/kiam-app/compare/v1.2.2...v1.3.0
