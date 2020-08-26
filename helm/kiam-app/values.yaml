@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 
 name: kiam
+serviceType: "managed"
 
 # clusterID is dynamic environment value, calculated after cluster creation
 # applies only to Giant Swarm clusters

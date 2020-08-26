@@ -4,20 +4,15 @@ metadata:
   name: {{ .Values.agent.name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Values.name }}
-    component: {{ .Values.agent.name }}
-    giantswarm.io/service-type: "managed"
+    {{- include "labels.agent" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      app: {{ .Values.name }}
-      component: {{ .Values.agent.name }}
+      {{- include "labels.selector.agent" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ .Values.name }}
-        component: {{ .Values.agent.name }}
-        giantswarm.io/service-type: "managed"
+        {{- include "labels.agent" . | nindent 8 }}
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet

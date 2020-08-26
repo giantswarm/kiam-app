@@ -25,6 +25,7 @@ const (
 	catalogURL         = "https://giantswarm.github.io/default-catalog"
 	testCatalogURL     = "https://giantswarm.github.io/default-test-catalog"
 	name               = "kiam"
+	appName            = "kiam-app"
 	serverName         = "kiam-server"
 )
 
@@ -34,6 +35,7 @@ var (
 	k8sSetup   *k8sclient.Setup
 	l          micrologger.Logger
 	tarballURL string
+	version    string
 )
 
 func init() {
@@ -49,8 +51,8 @@ func init() {
 	}
 
 	{
-		version := fmt.Sprintf("%s-%s", latestRelease, env.CircleSHA())
-		tarballURL, err = appcatalog.NewTarballURL(testCatalogURL, fmt.Sprintf("%s-app", name), version)
+		version = fmt.Sprintf("%s-%s", latestRelease, env.CircleSHA())
+		tarballURL, err = appcatalog.NewTarballURL(testCatalogURL, appName, version)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -100,6 +102,14 @@ func init() {
 		}
 	}
 
+	var helmChartLabel string
+	{
+		helmChartLabel = fmt.Sprintf("%s-%s", appName, version)
+		if len(helmChartLabel) > 63 {
+			helmChartLabel = helmChartLabel[:63]
+		}
+	}
+
 	{
 		c := basicapp.Config{
 			Clients:    k8sClients,
@@ -107,7 +117,7 @@ func init() {
 			Logger:     l,
 
 			App: basicapp.Chart{
-				Name:      name,
+				Name:      appName,
 				Namespace: metav1.NamespaceSystem,
 				URL:       tarballURL,
 			},
@@ -117,9 +127,14 @@ func init() {
 						Name:      agentName,
 						Namespace: metav1.NamespaceSystem,
 						Labels: map[string]string{
-							"app":                        name,
-							"component":                  agentName,
-							"giantswarm.io/service-type": "managed",
+							"app":                          name,
+							"component":                    agentName,
+							"app.kubernetes.io/instance":   appName,
+							"app.kubernetes.io/managed-by": "Helm",
+							"app.kubernetes.io/name":       name,
+							"app.kubernetes.io/version":    "3.6",
+							"giantswarm.io/service-type":   "managed",
+							"helm.sh/chart":                helmChartLabel,
 						},
 						MatchLabels: map[string]string{
 							"app":       name,
@@ -130,9 +145,14 @@ func init() {
 						Name:      serverName,
 						Namespace: metav1.NamespaceSystem,
 						Labels: map[string]string{
-							"app":                        name,
-							"component":                  serverName,
-							"giantswarm.io/service-type": "managed",
+							"app":                          name,
+							"component":                    serverName,
+							"app.kubernetes.io/instance":   appName,
+							"app.kubernetes.io/managed-by": "Helm",
+							"app.kubernetes.io/name":       name,
+							"app.kubernetes.io/version":    "3.6",
+							"giantswarm.io/service-type":   "managed",
+							"helm.sh/chart":                helmChartLabel,
 						},
 						MatchLabels: map[string]string{
 							"app":       name,

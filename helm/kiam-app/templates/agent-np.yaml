@@ -10,8 +10,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: {{ .Values.name }}
-      component: {{ .Values.agent.name }}
+      {{- include "labels.selector.agent" . | nindent 6 }}
   policyTypes:
   - Ingress
   - Egress

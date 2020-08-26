@@ -4,9 +4,7 @@ metadata:
   name: {{ .Values.agent.name }}-psp-use
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Values.name }}
-    component: {{ .Values.agent.name }}
-    giantswarm.io/service-type: "managed"
+    {{- include "labels.agent" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
