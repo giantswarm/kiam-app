@@ -4,19 +4,18 @@ metadata:
   name: {{ .Values.server.name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Values.name }}
-    component: {{ .Values.server.name }}
-    giantswarm.io/service-type: "managed"
+    {{- include "labels.server" . | nindent 4 }}
+    giantswarm.io/monitoring: "true"
   annotations:
     {{- if .Values.server.prometheus.scrape }}
     prometheus.io/scrape: "true"
     prometheus.io/port: {{ .Values.server.prometheus.port | quote }}
     {{- end }}
+    giantswarm.io/monitoring-port: {{ .Values.server.prometheus.port | quote }}
 spec:
   clusterIP: None
   selector:
-    app: {{ .Values.name }}
-    component: {{ .Values.server.name }}
+    {{- include "labels.selector.server" . | nindent 4 }}
   ports:
     {{- if .Values.server.prometheus.scrape }}
     - name: metrics

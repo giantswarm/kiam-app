@@ -4,20 +4,15 @@ metadata:
   name: {{ .Values.server.name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Values.name }}
-    component: {{ .Values.server.name }}
-    giantswarm.io/service-type: "managed"
+    {{- include "labels.server" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      app: {{ .Values.name }}
-      component: {{ .Values.server.name }}
+      {{- include "labels.selector.server" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ .Values.name }}
-        component: {{ .Values.server.name }}
-        giantswarm.io/service-type: "managed"
+        {{- include "labels.server" . | nindent 8 }}
     spec:
       serviceAccountName: {{ .Values.server.name }}
       securityContext:
