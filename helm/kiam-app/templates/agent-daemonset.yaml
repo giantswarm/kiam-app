@@ -66,9 +66,16 @@ spec:
               name: xtables
           livenessProbe:
             httpGet:
-              path: /ping
+              ## deep liveness probe will fail if the agent is not
+              ## able to communicate with servers, which may happen on
+              ## certificate change
+              ## source https://github.com/uswitch/kiam/blob/master/helm/kiam/values.yaml#L32-L35
+              path: /health?deep=1
               port: {{ .Values.agent.host.port }}
             initialDelaySeconds: 3
             periodSeconds: 3
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold:  3
           resources:
 {{ toYaml .Values.agent.resources | indent 12 }}

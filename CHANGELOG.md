@@ -7,6 +7,11 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Changed
+
+- Use deep liveness probe for kiam agent.
+- Align charts with upstream.
+
 ## [1.4.1] - 2020-08-19
 
 ### Added
