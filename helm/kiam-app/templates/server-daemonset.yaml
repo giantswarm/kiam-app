@@ -89,6 +89,8 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 10
             timeoutSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
           readinessProbe:
             exec:
               command:
@@ -104,5 +106,7 @@ spec:
             initialDelaySeconds: 3
             periodSeconds: 10
             timeoutSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
           resources:
 {{ toYaml .Values.server.resources | indent 12 }}

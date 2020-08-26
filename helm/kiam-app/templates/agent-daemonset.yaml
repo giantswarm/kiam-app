@@ -71,9 +71,12 @@ spec:
               name: xtables
           livenessProbe:
             httpGet:
-              path: /ping
+              path: /health?deep=1
               port: {{ .Values.agent.host.port }}
             initialDelaySeconds: 3
             periodSeconds: 3
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold:  3
           resources:
 {{ toYaml .Values.agent.resources | indent 12 }}
