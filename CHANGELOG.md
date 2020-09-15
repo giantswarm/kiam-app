@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Added
+
+- Setting gRPC environment variables
+
 ## [1.4.2] - 2020-08-27
 
 ### Changed

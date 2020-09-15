@@ -33,6 +33,10 @@ agent:
 
   log:
     level: info
+    # Default gprc log level and verbosity, see https://github.com/grpc/grpc-go/blob/master/grpclog/loggerv2.go#L130
+    # Only change it to debug failing grpc calls, see https://github.com/uswitch/kiam/issues/115#issue-340009605
+    grpcLogLevel: error
+    grpcLogVerbosity: 0
 
   prometheus:
     scrape: true

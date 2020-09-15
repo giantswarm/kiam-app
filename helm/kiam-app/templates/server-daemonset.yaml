@@ -63,6 +63,10 @@ spec:
           env:
             - name: AWS_REGION
               value: {{ .Values.kiam.region }}
+            - name: GRPC_GO_LOG_SEVERITY_LEVEL
+              value: {{ .Values.server.log.grpcLogLevel }}
+            - name: GRPC_GO_LOG_VERBOSITY_LEVEL
+              value: {{ .Values.server.log.grpcLogVerbosity }}
           volumeMounts:
             - mountPath: /etc/ssl/certs
               name: ssl-certs
