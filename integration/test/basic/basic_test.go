@@ -39,7 +39,7 @@ func checkReadyDaemonset(ctx context.Context) error {
 		}
 
 		if len(dms.Items) != 2 {
-			return microerror.Maskf(executionFailedError, "the number of kiam deployments in %#q should be equal to 2", app, metav1.NamespaceSystem)
+			return microerror.Maskf(executionFailedError, "the number of kiam deployments in %#q should be equal to 2", metav1.NamespaceSystem)
 		}
 
 		for _, ds := range dms.Items {
