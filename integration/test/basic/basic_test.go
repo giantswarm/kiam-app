@@ -4,12 +4,12 @@ package basic
 
 import (
 	"context"
-	"fmt"
 	"testing"
 	"time"
 
 	"github.com/giantswarm/backoff"
 	"github.com/giantswarm/microerror"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -30,27 +30,19 @@ func checkReadyDaemonset(ctx context.Context) error {
 	l.LogCtx(ctx, "level", "debug", "message", "waiting for ready daemonset")
 
 	o := func() error {
-		lo := metav1.ListOptions{
-			LabelSelector: fmt.Sprintf("%s=%s", "app.kubernetes.io/name", app),
-		}
-		dms, err := appTest.K8sClient().AppsV1().DaemonSets(metav1.NamespaceSystem).List(ctx, lo)
-		if err != nil {
-			return microerror.Mask(err)
+		_, err := appTest.K8sClient().AppsV1().DaemonSets(metav1.NamespaceSystem).Get(ctx, kiamServer, metav1.GetOptions{})
+		if apierrors.IsNotFound(err) {
+			return microerror.Maskf(executionFailedError, "daemonset %#q in %#q not found", kiamServer, metav1.NamespaceSystem)
 		}
 
-		if len(dms.Items) != 2 {
-			return microerror.Maskf(executionFailedError, "the number of kiam daemonsets in %#q should be equal to 2 but got %d", metav1.NamespaceSystem, len(dms.Items))
-		}
-
-		for _, ds := range dms.Items {
-			if ds.Status.NumberReady != ds.Status.DesiredNumberScheduled {
-				return microerror.Maskf(executionFailedError, "daemonset %#q want %d replicas %d ready", ds.Name, ds.Status.DesiredNumberScheduled, ds.Status.NumberReady)
-			}
+		_, err = appTest.K8sClient().AppsV1().DaemonSets(metav1.NamespaceSystem).Get(ctx, kiamAgent, metav1.GetOptions{})
+		if apierrors.IsNotFound(err) {
+			return microerror.Maskf(executionFailedError, "daemonset %#q in %#q not found", kiamAgent, metav1.NamespaceSystem)
 		}
 
 		return nil
 	}
-	b := backoff.NewConstant(4*time.Minute, 5*time.Second)
+	b := backoff.NewConstant(2*time.Minute, 5*time.Second)
 	n := backoff.NewNotifier(l, ctx)
 
 	err = backoff.RetryNotify(o, b, n)
