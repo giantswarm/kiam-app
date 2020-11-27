@@ -92,7 +92,7 @@ server:
 
   sessionDuration: 15m
 
-  nodeSelector:
+  nodeSelector: |
     kubernetes.io/role: master
 
 image:
