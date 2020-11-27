@@ -44,7 +44,7 @@ func checkReadyDaemonset(ctx context.Context) error {
 
 		for _, ds := range dms.Items {
 			if ds.Status.NumberReady != ds.Status.DesiredNumberScheduled {
-				return microerror.Maskf(executionFailedError, "daemonset %#q want %d replicas %d ready", app, ds.Status.DesiredNumberScheduled, ds.Status.NumberReady)
+				return microerror.Maskf(executionFailedError, "daemonset %#q want %d replicas %d ready", ds.Name, ds.Status.DesiredNumberScheduled, ds.Status.NumberReady)
 			}
 		}
 
