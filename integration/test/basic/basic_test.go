@@ -5,57 +5,60 @@ package basic
 import (
 	"context"
 	"fmt"
-	"os"
 	"testing"
+	"time"
 
-	"github.com/giantswarm/appcatalog"
-	"github.com/giantswarm/helmclient"
+	"github.com/giantswarm/backoff"
 	"github.com/giantswarm/microerror"
-	"github.com/giantswarm/micrologger"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func TestHelm(t *testing.T) {
+// TestSecrets ensures that kiam-server and kiam-agent created
+func TestSecrets(t *testing.T) {
 	ctx := context.Background()
+	var err error
 
-	// Install cert-manager so kiam certs can be issued.
-	err := installCertManager(ctx, helmClient, l)
+	err = checkReadyDaemonset(ctx)
 	if err != nil {
-		t.Fatalf("%#v", err)
-	}
-
-	err = ba.Test(context.Background())
-	if err != nil {
-		t.Fatalf("%#v", err)
+		t.Fatalf("could not get kiam-agent & kiam-server: %v", err)
 	}
 }
 
-func installCertManager(ctx context.Context, helmClient helmclient.Interface, logger micrologger.Logger) error {
-	tarballURL, err := appcatalog.GetLatestChart(ctx, catalogURL, certManagerAppName, "")
-	if err != nil {
-		return microerror.Mask(err)
-	}
+func checkReadyDaemonset(ctx context.Context) error {
+	var err error
 
-	tarballPath, err := helmClient.PullChartTarball(ctx, tarballURL)
-	if err != nil {
-		return microerror.Mask(err)
-	}
+	l.LogCtx(ctx, "level", "debug", "message", "waiting for ready daemonset")
 
-	defer func() {
-		err := os.Remove(tarballPath)
-		if err != nil {
-			logger.LogCtx(ctx, "level", "debug", "message", fmt.Sprintf("deletion of %#q failed", tarballPath), "stack", microerror.JSON(err))
+	o := func() error {
+		lo := metav1.ListOptions{
+			LabelSelector: fmt.Sprintf("%s=%s", "app.kubernetes.io/name", app),
 		}
-	}()
+		dms, err := appTest.K8sClient().AppsV1().DaemonSets(metav1.NamespaceSystem).List(ctx, lo)
+		if err != nil {
+			return microerror.Mask(err)
+		}
 
-	options := helmclient.InstallOptions{
-		ReleaseName: certManagerAppName,
+		if len(dms.Items) != 2 {
+			return microerror.Maskf(executionFailedError, "the number of kiam deployments in %#q should be equal to 2", app, metav1.NamespaceSystem)
+		}
+
+		for _, ds := range dms.Items {
+			if ds.Status.NumberReady != ds.Status.DesiredNumberScheduled {
+				return microerror.Maskf(executionFailedError, "daemonset %#q want %d replicas %d ready", app, ds.Status.DesiredNumberScheduled, ds.Status.NumberReady)
+			}
+		}
+
+		return nil
 	}
+	b := backoff.NewConstant(2*time.Minute, 5*time.Second)
+	n := backoff.NewNotifier(l, ctx)
 
-	err = helmClient.InstallReleaseFromTarball(ctx, tarballPath, metav1.NamespaceSystem, map[string]interface{}{}, options)
+	err = backoff.RetryNotify(o, b, n)
 	if err != nil {
 		return microerror.Mask(err)
 	}
+
+	l.LogCtx(ctx, "level", "debug", "message", "deployment is ready")
 
 	return nil
 }
