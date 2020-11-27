@@ -92,9 +92,6 @@ server:
 
   sessionDuration: 15m
 
-  nodeSelector: |
-    kubernetes.io/role: master
-
 image:
   name: giantswarm/kiam
   tag: v3.6

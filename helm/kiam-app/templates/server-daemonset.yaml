@@ -21,7 +21,7 @@ spec:
         fsGroup: {{ .Values.server.groupID }}
       hostNetwork: false
       nodeSelector:
-{{ toYaml .Values.server.nodeSelector | indent 8 }}
+        kubernetes.io/role: master
       tolerations:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
