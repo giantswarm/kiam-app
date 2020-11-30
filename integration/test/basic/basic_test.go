@@ -13,21 +13,21 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// TestSecrets ensures that kiam-server and kiam-agent created
-func TestSecrets(t *testing.T) {
+// TestDaemonSets ensures that kiam-server and kiam-agent daemonset are created
+func TestDaemonSets(t *testing.T) {
 	ctx := context.Background()
 	var err error
 
-	err = checkReadyDaemonset(ctx)
+	err = checkDaemonsetExists(ctx)
 	if err != nil {
 		t.Fatalf("could not get kiam-agent & kiam-server: %v", err)
 	}
 }
 
-func checkReadyDaemonset(ctx context.Context) error {
+func checkDaemonsetExists(ctx context.Context) error {
 	var err error
 
-	l.LogCtx(ctx, "level", "debug", "message", "waiting for ready daemonset")
+	l.LogCtx(ctx, "level", "debug", "message", "waiting for daemonset create")
 
 	o := func() error {
 		_, err := appTest.K8sClient().AppsV1().DaemonSets(metav1.NamespaceSystem).Get(ctx, kiamServer, metav1.GetOptions{})
@@ -50,7 +50,7 @@ func checkReadyDaemonset(ctx context.Context) error {
 		return microerror.Mask(err)
 	}
 
-	l.LogCtx(ctx, "level", "debug", "message", "deployment is ready")
+	l.LogCtx(ctx, "level", "debug", "message", "daemonsets are created")
 
 	return nil
 }
