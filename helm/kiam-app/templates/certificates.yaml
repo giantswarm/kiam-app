@@ -1,4 +1,4 @@
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: {{ .Values.name }}-selfsigning-issuer
@@ -9,7 +9,7 @@ spec:
   selfSigned: {}
 
 ---
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: {{ .Values.name }}-ca
@@ -24,7 +24,7 @@ spec:
     name: {{ .Values.name }}-selfsigning-issuer
 
 ---
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: {{ .Values.name }}-ca-issuer
@@ -36,7 +36,7 @@ spec:
     secretName: {{ .Values.name }}-ca-tls
 
 ---
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: {{ .Values.agent.name }}
@@ -49,7 +49,7 @@ spec:
     name: {{ .Values.name }}-ca-issuer
 
 ---
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: {{ .Values.server.name }}
