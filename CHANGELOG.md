@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [2.0.0] - 2021-01-12
+
 ## Changed
 
 - Upgrade `kiam` version to 4.0.
@@ -121,7 +123,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - `kiam` upstream helm chart `v3.4`
 
-[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/giantswarm/kiam-app/compare/v1.6.0...v2.0.0
 [1.6.0]: https://github.com/giantswarm/kiam-app/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/giantswarm/kiam-app/compare/v1.4.2...v1.5.0
 [1.4.2]: https://github.com/giantswarm/kiam-app/compare/v1.4.1...v1.4.2
