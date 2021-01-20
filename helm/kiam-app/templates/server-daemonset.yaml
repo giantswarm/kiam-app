@@ -23,8 +23,14 @@ spec:
       nodeSelector:
         kubernetes.io/role: master
       tolerations:
-      - key: node-role.kubernetes.io/master
-        effect: NoSchedule
+      # Make sure kiam agent gets scheduled on all master nodes. ignoring all taints
+      - effect: NoSchedule
+        operator: Exists
+      # Mark the pod as a critical add-on for rescheduling.
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
       volumes:
         - name: ssl-certs
           hostPath:
