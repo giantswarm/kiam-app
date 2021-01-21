@@ -7,12 +7,6 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
-## [2.0.0] - 2021-01-12
-
-## Changed
-
-- Upgrade `kiam` version to 4.0.
-
 ## [1.6.0] - 2021-01-07
 
 ## [1.5.0] - 2020-09-15
