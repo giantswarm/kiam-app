@@ -17,6 +17,17 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       serviceAccountName: {{ .Values.agent.name }}
+      nodeSelector:
+        kubernetes.io/role: worker
+      tolerations:
+        # Make sure kiam agent gets scheduled on all worker nodes. Ignoring all taints.
+        - effect: NoSchedule
+          operator: Exists
+        # Mark the pod as a critical add-on for rescheduling.
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - effect: NoExecute
+          operator: Exists
       volumes:
         - name: tls
           secret:
