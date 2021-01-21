@@ -9,6 +9,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [1.7.0] - 2021-01-21
 
+- Add taint tolerations for kiam agent and kiam server.
+
 ## [1.6.0] - 2021-01-07
 
 ## [1.5.0] - 2020-09-15
