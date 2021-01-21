@@ -23,7 +23,7 @@ spec:
       nodeSelector:
         kubernetes.io/role: master
       tolerations:
-      # Make sure kiam agent gets scheduled on all master nodes. ignoring all taints
+      # Make sure kiam server gets scheduled on all master nodes. ignoring all taints
       - effect: NoSchedule
         operator: Exists
       # Mark the pod as a critical add-on for rescheduling.
