@@ -17,6 +17,7 @@ upstreamChartURL: https://github.com/uswitch/kiam/tree/master/helm/kiam
 restrictions:
   compatibleProviders: ["aws"]
   fixedNamespace: kube-system
+  clusterSingleton: true
   # dependencies:
   # - name: kiam-namespace-annotation
   #   version: "0.1.0"
