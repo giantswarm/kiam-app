@@ -1,0 +1,9 @@
+checks:
+  addAllBuiltIn: true
+  exclude:
+  - "unset-cpu-requirements"
+  - "unset-memory-requirements"
+  - "no-anti-affinity"
+  - "no-read-only-root-fs"
+  - "drop-net-raw-capability"
+  - "run-as-non-root"
