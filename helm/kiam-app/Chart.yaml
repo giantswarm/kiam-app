@@ -1,9 +1,23 @@
 apiVersion: v1
 name: kiam-app
-namespace: kube-system
-version: [[ .Version ]]
-appVersion: 3.6
+version: "v1.7.0-dev"
+appVersion: "3.6"
 description: Integrate AWS IAM with Kubernetes
 home: https://github.com/uswitch/kiam
 icon: https://user-images.githubusercontent.com/44974642/63503185-ee2ce880-c4c6-11e9-9a65-c398db914289.png
-compatibleProviders: ["aws"]
+sources:
+  - https://github.com/uswitch/kiam
+  - https://github.com/giantswarm/kiam-app
+maintainers:
+- name: Giant Swarm Firecracker team
+  url: https://github.com/giantswarm/kiam-app
+annotations:
+  application.giantswarm.io/readme: https://github.com/giantswarm/kiam-app/blob/master/README.md
+upstreamChartURL: https://github.com/uswitch/kiam/tree/master/helm/kiam
+restrictions:
+  compatibleProviders: ["aws"]
+  fixedNamespace: kube-system
+  # dependencies:
+  # - name: kiam-namespace-annotation
+  #   version: "0.1.0"
+  #   repository: "file://./charts/kiam-namespace-annotation/"
