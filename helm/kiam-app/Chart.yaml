@@ -18,7 +18,3 @@ restrictions:
   compatibleProviders: ["aws"]
   fixedNamespace: kube-system
   clusterSingleton: true
-  # dependencies:
-  # - name: kiam-namespace-annotation
-  #   version: "0.1.0"
-  #   repository: "file://./charts/kiam-namespace-annotation/"
