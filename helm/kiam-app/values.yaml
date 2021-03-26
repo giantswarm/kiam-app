@@ -99,7 +99,7 @@ image:
 
 global:
   image:
-    registry: quay.io
+    registry: docker.io
 
 # placeholder, value taken from default-appcatalog-values.yaml
 kiam:
