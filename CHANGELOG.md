@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Changed
+
+- Set docker.io as the default registry
+
 ## [1.7.0] - 2021-01-21
 
 - Add taint tolerations for kiam agent and kiam server.
