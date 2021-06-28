@@ -1,0 +1,3 @@
+dependencies:
+- name: kiam-namespace-annotation
+  version: 0.1.0
