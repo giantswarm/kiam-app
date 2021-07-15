@@ -21,7 +21,7 @@ spec:
         fsGroup: {{ .Values.server.groupID }}
       hostNetwork: false
       nodeSelector:
-        kubernetes.io/role: master
+        node-role.kubernetes.io/master: ""
       tolerations:
       # Make sure kiam server gets scheduled on all master nodes. ignoring all taints
       - effect: NoSchedule
