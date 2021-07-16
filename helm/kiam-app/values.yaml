@@ -94,7 +94,7 @@ server:
 
 image:
   name: giantswarm/kiam
-  tag: v3.6
+  tag: v4.1
   pullPolicy: IfNotPresent
 
 global:
