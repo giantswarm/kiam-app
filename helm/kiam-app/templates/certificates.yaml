@@ -21,6 +21,8 @@ spec:
   commonName: {{ .Values.name }}
   isCA: true
   issuerRef:
+    group: cert-manager.io
+    kind: Issuer
     name: {{ .Values.name }}-selfsigning-issuer
 
 ---
@@ -46,6 +48,8 @@ spec:
   secretName: {{ .Values.agent.name }}-tls
   commonName: {{ .Values.agent.name }}
   issuerRef:
+    group: cert-manager.io
+    kind: Issuer
     name: {{ .Values.name }}-ca-issuer
 
 ---
@@ -59,6 +63,8 @@ spec:
   secretName: {{ .Values.server.name }}-tls
   commonName: {{ .Values.server.name }}
   issuerRef:
+    group: cert-manager.io
+    kind: Issuer
     name: {{ .Values.name }}-ca-issuer
   dnsNames:
   - "localhost"

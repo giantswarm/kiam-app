@@ -11,6 +11,7 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - Upgrade `kiam` version to 4.1.
 - Update RBAC API version from `v1beta1` to `v1`.
+- Add `kind: Issuer` and `group: cert-manager.io` to `Certificate` templates.
 
 ## [1.7.1] - 2021-03-26
 
