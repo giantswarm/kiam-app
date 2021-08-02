@@ -135,7 +135,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - `kiam` upstream helm chart `v3.4`
 
-[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v1.7.1...HEAD
+[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/giantswarm/kiam-app/compare/v1.7.1...v2.0.0
 [1.7.1]: https://github.com/giantswarm/kiam-app/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/giantswarm/kiam-app/compare/v2.0.0...v1.7.0
 [2.0.0]: https://github.com/giantswarm/kiam-app/compare/v1.6.0...v2.0.0
