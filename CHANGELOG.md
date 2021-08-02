@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [2.0.0]
+
 ### Changed
 
 - Upgrade `kiam` version to 4.1.
