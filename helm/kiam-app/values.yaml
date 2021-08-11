@@ -90,7 +90,8 @@ server:
     port: 6443
     targetPort: 6443
 
-  sessionDuration: 15m
+  sessionDuration: 60m
+  sessionRefresh: 10m
 
 image:
   name: giantswarm/kiam
