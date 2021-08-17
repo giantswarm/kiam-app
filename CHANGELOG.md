@@ -7,6 +7,11 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Changed
+
+- Increase AWS session duration to `60m`.
+- Increase AWS session refresh to `10m`.
+
 ## [2.0.0]
 
 ### Changed
