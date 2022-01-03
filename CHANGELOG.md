@@ -9,6 +9,7 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ### Changed
 
+- Upgrade `kiam` version to 4.2.
 - Increase AWS session duration to `60m`.
 - Increase AWS session refresh to `10m`.
 
