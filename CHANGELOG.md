@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Added
+
+- Build script to generate an IRSA compatible version of each release
+
 ## [2.1.0] - 2022-01-03
 
 ### Changed
@@ -123,7 +127,7 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ### Changed
 
 - Updated server network policy labels to match server daemonset labels.
-- Fixed hooks for sub chart that labels kube-system namespace.  
+- Fixed hooks for sub chart that labels kube-system namespace.
 
 ## [1.0.2] 2020-01-04
 
