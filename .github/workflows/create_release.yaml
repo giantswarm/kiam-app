@@ -1,17 +1,13 @@
-# DO NOT EDIT. Generated with:
-#
-#    devctl@4.19.0
-#
 name: Create Release
 on:
   push:
     branches:
       - 'legacy'
-      - 'main'
       - 'master'
       - 'release-v*.*.x'
       # "!" negates previous positive patterns so it has to be at the end.
       - '!release-v*.x.x'
+
 jobs:
   debug_info:
     name: Debug info
@@ -33,10 +29,7 @@ jobs:
       - name: Get version
         id: get_version
         run: |
-          title="$(cat <<- 'COMMIT_MESSAGE_END' | head -n 1 -
-          ${{ github.event.head_commit.message }}
-          COMMIT_MESSAGE_END
-          )"
+          title="$(echo "${{ github.event.head_commit.message }}" | head -n 1 -)"
           # Matches strings like:
           #
           #   - "Release v1.2.3"
@@ -45,11 +38,11 @@ jobs:
           #   - "Release v1.2.3-r4 (#56)"
           #
           # And outputs version part (1.2.3).
-          if echo "${title}" | grep -iqE '^Release v[0-9]+\.[0-9]+\.[0-9]+([.-][^ .-][^ ]*)?( \(#[0-9]+\))?$' ; then
-          version=$(echo "${title}" | cut -d ' ' -f 2)
+          if echo $title | grep -iqE '^Release v[0-9]+\.[0-9]+\.[0-9]+([.-][^ .-][^ ]*)?( \(#[0-9]+\))?$' ; then
+            version=$(echo $title | cut -d ' ' -f 2)
           fi
           version="${version#v}" # Strip "v" prefix.
-          echo "version=\"${version}\""
+          echo "version=\"$version\""
           echo "::set-output name=version::${version}"
       - name: Checkout code
         if: ${{ steps.get_version.outputs.version != '' }}
@@ -67,21 +60,18 @@ jobs:
       - name: Check if reference version
         id: ref_version
         run: |
-          title="$(cat <<- 'COMMIT_MESSAGE_END' | head -n 1 -
-          ${{ github.event.head_commit.message }}
-          COMMIT_MESSAGE_END
-          )"
-          if echo "${title}" | grep -qE '^release v[0-9]+\.[0-9]+\.[0-9]+([.-][^ .-][^ ]*)?( \(#[0-9]+\))?$' ; then
-            version=$(echo "${title}" | cut -d ' ' -f 2)
+          title="$(echo "${{ github.event.head_commit.message }}" | head -n 1 -)"
+          if echo $title | grep -qE '^release v[0-9]+\.[0-9]+\.[0-9]+([.-][^ .-][^ ]*)?( \(#[0-9]+\))?$' ; then
+            version=$(echo $title | cut -d ' ' -f 2)
           fi
-          version=$(echo "${title}" | cut -d ' ' -f 2)
+          version=$(echo $title | cut -d ' ' -f 2)
           version="${version#v}" # Strip "v" prefix.
           refversion=false
           if [[ "${version}" =~ ^[0-9]+.[0-9]+.[0-9]+-[0-9]+$ ]]; then
             refversion=true
           fi
-          echo "refversion =\"${refversion}\""
-          echo "::set-output name=refversion::${refversion}"
+          echo "refversion =\"$refversion\""
+          echo "::set-output name=refversion::$refversion"
   update_project_go:
     name: Update project.go
     runs-on: ubuntu-20.04
@@ -93,12 +83,12 @@ jobs:
         uses: giantswarm/install-binary-action@v1.0.0
         with:
           binary: "architect"
-          version: "6.1.0"
+          version: "3.0.5"
       - name: Install semver
         uses: giantswarm/install-binary-action@v1.0.0
         with:
           binary: "semver"
-          version: "3.2.0"
+          version: "3.0.0"
           download_url: "https://github.com/fsaintjacques/${binary}-tool/archive/${version}.tar.gz"
           tarball_binary_path: "*/src/${binary}"
           smoke_test: "${binary} --version"
@@ -161,12 +151,6 @@ jobs:
           file="${{ needs.gather_facts.outputs.project_go_path }}"
           version="${{ needs.gather_facts.outputs.version }}"
           grep -qE "version[[:space:]]*=[[:space:]]*\"$version\"" $file
-      - name: Get Changelog Entry
-        id: changelog_reader
-        uses: mindsers/changelog-reader-action@v2
-        with:
-          version: ${{ needs.gather_facts.outputs.version }}
-          path: ./CHANGELOG.md
       - name: Create tag
         run: |
           version="${{ needs.gather_facts.outputs.version }}"
@@ -183,10 +167,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          body: ${{ steps.changelog_reader.outputs.changes }}
           tag_name: "v${{ needs.gather_facts.outputs.version }}"
           release_name: "v${{ needs.gather_facts.outputs.version }}"
-
   create-release-branch:
     name: Create release branch
     runs-on: ubuntu-20.04
@@ -246,3 +228,82 @@ jobs:
 
           git branch $release_branch HEAD^
           git push origin $release_branch
+
+
+
+
+  create_irsa_release:
+    name: Create IRSA release
+    runs-on: ubuntu-20.04
+    needs:
+      - gather_facts
+    if: ${{ needs.gather_facts.outputs.version }}
+    outputs:
+      upload_url: ${{ steps.create_gh_release.outputs.upload_url }}
+      release_branch: ${{ steps.release_branch.outputs.release_branch }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.ref }}
+      - name: Create long-lived release branch
+        id: release_branch
+        run: |
+          current_version="${{ needs.gather_facts.outputs.version }}"
+          parent_version="$(git describe --tags --abbrev=0 HEAD^ || true)"
+          parent_version="${parent_version#v}" # Strip "v" prefix.
+
+          if [[ -z "$parent_version" ]] ; then
+            echo "Unable to find a parent tag version. No branch to create."
+            exit 0
+          fi
+
+          echo "current_version=$current_version parent_version=$parent_version"
+
+          current_major=$(semver get major $current_version)
+          current_minor=$(semver get minor $current_version)
+          parent_major=$(semver get major $parent_version)
+          parent_minor=$(semver get minor $parent_version)
+          echo "current_major=$current_major current_minor=$current_minor parent_major=$parent_major parent_minor=$parent_minor"
+
+          if [[ $current_major -gt $parent_major ]] ; then
+            echo "Current tag is a new major version"
+          elif [[ $current_major -eq $parent_major ]] && [[ $current_minor -gt $parent_minor ]] ; then
+            echo "Current tag is a new minor version"
+          else
+            echo "Current tag is not a new major or minor version. Nothing to do here."
+            exit 0
+          fi
+
+          release_branch="release-v${parent_major}.${parent_minor}.x-irsa"
+          echo "release_branch=$release_branch"
+          echo "::set-output name=release_branch::${release_branch}"
+
+          git branch $release_branch HEAD^
+          git push origin $release_branch
+      - name: Update chart values
+        run: |
+          file="./helm/kiam-app/values.yaml"
+          sed -i "s|# whiteListRouteRegexp: disabled by default|whiteListRouteRegexp: /latest/meta-data/placement/availability-zone|" ${file}
+
+          git config --local user.name "github-actions"
+          git add ${file}
+          git commit -m "Updated default values for IRSA"
+          git push origin ${{ steps.release_branch.outputs.release_branch }}
+      - name: Create tag
+        run: |
+          git config --local user.name "github-actions"
+          git tag "v${{ needs.gather_facts.outputs.version }}-irsa" ${{ github.sha }}
+      - name: Push tag
+        env:
+          REMOTE_REPO: "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+        run: |
+          git push "${REMOTE_REPO}" --tags
+      - name: Create release
+        id: create_gh_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "v${{ steps.get_version.outputs.version }}-irsa"
+          release_name: "v${{ steps.get_version.outputs.version }}-irsa"

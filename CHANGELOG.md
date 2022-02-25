@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Fixed
+
+- Merged two release workflows into one to handle both tags
+
 ## [2.1.1] - 2022-02-25
 
 ### Added
