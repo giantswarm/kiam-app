@@ -4,6 +4,7 @@ on:
     branches:
       - 'legacy'
       - 'master'
+      - 'main'
       - 'release-v*.*.x'
       # "!" negates previous positive patterns so it has to be at the end.
       - '!release-v*.x.x'
@@ -22,7 +23,6 @@ jobs:
     name: Gather facts
     runs-on: ubuntu-20.04
     outputs:
-      project_go_path: ${{ steps.get_project_go_path.outputs.path }}
       ref_version: ${{ steps.ref_version.outputs.refversion }}
       version: ${{ steps.get_version.outputs.version }}
     steps:
@@ -47,16 +47,6 @@ jobs:
       - name: Checkout code
         if: ${{ steps.get_version.outputs.version != '' }}
         uses: actions/checkout@v2
-      - name: Get project.go path
-        id: get_project_go_path
-        if: ${{ steps.get_version.outputs.version != '' }}
-        run: |
-          path='./pkg/project/project.go'
-          if [[ ! -f $path ]] ; then
-            path=''
-          fi
-          echo "path=\"$path\""
-          echo "::set-output name=path::${path}"
       - name: Check if reference version
         id: ref_version
         run: |
@@ -72,66 +62,6 @@ jobs:
           fi
           echo "refversion =\"$refversion\""
           echo "::set-output name=refversion::$refversion"
-  update_project_go:
-    name: Update project.go
-    runs-on: ubuntu-20.04
-    if: ${{ needs.gather_facts.outputs.version != '' && needs.gather_facts.outputs.project_go_path != '' && needs.gather_facts.outputs.ref_version != 'true' }}
-    needs:
-      - gather_facts
-    steps:
-      - name: Install architect
-        uses: giantswarm/install-binary-action@v1.0.0
-        with:
-          binary: "architect"
-          version: "3.0.5"
-      - name: Install semver
-        uses: giantswarm/install-binary-action@v1.0.0
-        with:
-          binary: "semver"
-          version: "3.0.0"
-          download_url: "https://github.com/fsaintjacques/${binary}-tool/archive/${version}.tar.gz"
-          tarball_binary_path: "*/src/${binary}"
-          smoke_test: "${binary} --version"
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Update project.go
-        id: update_project_go
-        env:
-          branch: "${{ github.ref }}-version-bump"
-        run: |
-          git checkout -b ${{ env.branch }}
-          file="${{ needs.gather_facts.outputs.project_go_path }}"
-          version="${{ needs.gather_facts.outputs.version }}"
-          new_version="$(semver bump patch $version)-dev"
-          echo "version=\"$version\" new_version=\"$new_version\""
-          echo "::set-output name=new_version::${new_version}"
-          sed -Ei "s/(version[[:space:]]*=[[:space:]]*)\"${version}\"/\1\"${new_version}\"/" $file
-          if git diff --exit-code $file ; then
-            echo "error: no changes in \"$file\"" >&2
-            exit 1
-          fi
-      - name: Commit changes
-        run: |
-          file="${{ needs.gather_facts.outputs.project_go_path }}"
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add $file
-          git commit -m "Bump version to ${{ steps.update_project_go.outputs.new_version }}"
-      - name: Push changes
-        env:
-          REMOTE_REPO: "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
-          branch: "${{ github.ref }}-version-bump"
-        run: |
-          git push "${REMOTE_REPO}" HEAD:${{ env.branch }}
-      - name: Create PR
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          base: "${{ github.ref }}"
-          branch: "${{ github.ref }}-version-bump"
-          version: "${{ needs.gather_facts.outputs.version }}"
-          title: "Bump version to ${{ steps.update_project_go.outputs.new_version }}"
-        run: |
-          hub pull-request -f  -m "${{ env.title }}" -b ${{ env.base }} -h ${{ env.branch }} -r ${{ github.actor }}
   create_release:
     name: Create release
     runs-on: ubuntu-20.04
@@ -145,12 +75,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.sha }}
-      - name: Ensure correct version in project.go
-        if: ${{ needs.gather_facts.outputs.project_go_path != '' && needs.gather_facts.outputs.ref_version != 'true' }}
-        run: |
-          file="${{ needs.gather_facts.outputs.project_go_path }}"
-          version="${{ needs.gather_facts.outputs.version }}"
-          grep -qE "version[[:space:]]*=[[:space:]]*\"$version\"" $file
       - name: Create tag
         run: |
           version="${{ needs.gather_facts.outputs.version }}"
@@ -226,11 +150,8 @@ jobs:
             exit 0
           fi
 
-          git branch $release_branch HEAD^
+          git branch -fm $release_branch
           git push origin $release_branch
-
-
-
 
   create_irsa_release:
     name: Create IRSA release
@@ -254,33 +175,27 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.ref }}
-      - name: Create long-lived release branch
-        id: release_branch
+      - name: Update chart values
         run: |
-          current_version="${{ needs.gather_facts.outputs.version }}.x"
+          current_version="${{ needs.gather_facts.outputs.version }}"
           current_major=$(semver get major $current_version)
           current_minor=$(semver get minor $current_version)
 
           release_branch="release-v${current_major}.${current_minor}.x-irsa"
           echo "release_branch=$release_branch"
-          echo "::set-output name=release_branch::${release_branch}"
 
-          git branch $release_branch HEAD^
-          git push origin $release_branch
-      - name: Update chart values
-        if: ${{ steps.release_branch.outputs.release_branch }}
-        run: |
+          git config --local user.name "github-actions"
+          git branch -fm $release_branch
           file="./helm/kiam-app/values.yaml"
           sed -i "s|# whiteListRouteRegexp: disabled by default|whiteListRouteRegexp: /latest/meta-data/placement/availability-zone|" ${file}
 
-          git config --local user.name "github-actions"
           git add ${file}
           git commit -m "Updated default values for IRSA"
-          git push origin ${{ steps.release_branch.outputs.release_branch }}
+          git push -f origin $release_branch
       - name: Create tag
         run: |
           git config --local user.name "github-actions"
-          git tag "v${{ needs.gather_facts.outputs.version }}-irsa" ${{ github.sha }}
+          git tag "v${{ needs.gather_facts.outputs.version }}-irsa"
       - name: Push tag
         env:
           REMOTE_REPO: "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
@@ -292,5 +207,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "v${{ steps.get_version.outputs.version }}-irsa"
-          release_name: "v${{ steps.get_version.outputs.version }}-irsa"
+          tag_name: "v${{ needs.gather_facts.outputs.version }}-irsa"
+          release_name: "v${{ needs.gather_facts.outputs.version }}-irsa"
+          prerelease: true
