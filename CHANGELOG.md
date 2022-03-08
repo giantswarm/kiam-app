@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [2.2.0] - 2022-03-08
+
 ### Changed
 
 - Updated `whiteListRouteRegexp` to default to `/latest/meta-data/placement/availability-zone`
@@ -165,7 +167,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - `kiam` upstream helm chart `v3.4`
 
-[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v2.1.5...HEAD
+[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/giantswarm/kiam-app/compare/v2.1.5...v2.2.0
 [2.1.5]: https://github.com/giantswarm/kiam-app/compare/v2.1.4...v2.1.5
 [2.1.4]: https://github.com/giantswarm/kiam-app/compare/v2.1.3...v2.1.4
 [2.1.3]: https://github.com/giantswarm/kiam-app/compare/v2.1.2...v2.1.3
