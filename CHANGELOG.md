@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Changed
+
+- Updated `whiteListRouteRegexp` to default to `/latest/meta-data/placement/availability-zone`
+
 ## [2.1.5] - 2022-02-28
 
 ## [2.1.4] - 2022-02-25
