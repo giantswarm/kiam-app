@@ -51,7 +51,7 @@ agent:
       memory: 50Mi
 
   # agent whitelist of proxy routes matching this reg-ex
-  # whiteListRouteRegexp: disabled by default
+  whiteListRouteRegexp: /latest/meta-data/placement/availability-zone
 
 server:
   name: kiam-server
