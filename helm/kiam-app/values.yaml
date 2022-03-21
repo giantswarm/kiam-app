@@ -53,6 +53,9 @@ agent:
   # agent whitelist of proxy routes matching this reg-ex
   whiteListRouteRegexp: /latest/meta-data/placement/availability-zone
 
+  verticalPodAutoscaler:
+    enabled: true
+
 server:
   name: kiam-server
 
@@ -92,6 +95,9 @@ server:
 
   sessionDuration: 60m
   sessionRefresh: 10m
+
+  verticalPodAutoscaler:
+    enabled: true
 
 image:
   name: giantswarm/kiam
