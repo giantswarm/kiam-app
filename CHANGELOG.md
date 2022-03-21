@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [2.3.0] - 2022-03-21
+
 ### Added
 
 - Add VerticalPodAutoscaler CR.
@@ -171,7 +173,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - `kiam` upstream helm chart `v3.4`
 
-[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v2.3.0...HEAD
+[2.3.0]: https://github.com/giantswarm/kiam-app/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/giantswarm/kiam-app/compare/v2.1.5...v2.2.0
 [2.1.5]: https://github.com/giantswarm/kiam-app/compare/v2.1.4...v2.1.5
 [2.1.4]: https://github.com/giantswarm/kiam-app/compare/v2.1.3...v2.1.4
