@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Changed
+
+- Change the kube-system annotation job's Restart Policy to `OnFailure`.
+
 ## [2.3.0] - 2022-03-21
 
 ### Added
