@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [2.4.0] - 2022-08-09
+
 ### Changed
 
 - Change the kube-system annotation job's Restart Policy to `OnFailure`.
@@ -177,7 +179,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - `kiam` upstream helm chart `v3.4`
 
-[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v2.3.0...HEAD
+[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v2.4.0...HEAD
+[2.4.0]: https://github.com/giantswarm/kiam-app/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/giantswarm/kiam-app/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/giantswarm/kiam-app/compare/v2.1.5...v2.2.0
 [2.1.5]: https://github.com/giantswarm/kiam-app/compare/v2.1.4...v2.1.5
