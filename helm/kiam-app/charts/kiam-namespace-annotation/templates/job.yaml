@@ -25,5 +25,5 @@ spec:
         - "/usr/local/bin/kubectl annotate namespace kube-system iam.amazonaws.com/permitted=.* --overwrite"
         resources:
 {{ toYaml .Values.resources | indent 10 }}
-      restartPolicy: Never
+      restartPolicy: OnFailure
   backoffLimit: 4
