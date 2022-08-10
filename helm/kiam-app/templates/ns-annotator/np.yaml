@@ -1,0 +1,23 @@
+{{ if .Values.namespaceAnnotator.enabled }}
+{{ if gt (len .Values.namespaceAnnotator.namespaces) 0 }}
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ .Values.namespaceAnnotator.name }}
+  namespace: {{ .Values.namespaceAnnotator.namespace }}
+  labels:
+    app: {{ .Values.namespaceAnnotator.name }}
+    giantswarm.io/service-type: "managed"
+spec:
+  podSelector:
+    matchLabels:
+      job-name: {{ .Values.namespaceAnnotator.name }}
+  ingress:
+  - {}
+  egress:
+  - {}
+  policyTypes:
+  - Egress
+  - Ingress
+{{ end }}
+{{ end }}

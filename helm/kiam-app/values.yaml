@@ -111,3 +111,28 @@ global:
 # placeholder, value taken from default-appcatalog-values.yaml
 kiam:
   region: eu-central-1
+
+namespaceAnnotator:
+  enabled: true
+
+  name: kiam-namespace-annotation
+  namespace: kube-system
+
+  namespaces: []
+  ciuao:
+  - name: kube-system
+    roleRegexp: .*
+
+  userID: 1000
+  groupID: 1000
+
+  image:
+    name: giantswarm/docker-kubectl
+    tag: latest
+
+  resources:
+    limits:
+      memory: 75Mi
+    requests:
+      cpu: 50m
+      memory: 75Mi

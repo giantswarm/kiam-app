@@ -1,0 +1,31 @@
+{{ if .Values.namespaceAnnotator.enabled }}
+{{ range .Values.namespaceAnnotator.namespaces }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $.Values.namespaceAnnotator.name }}-{{ .name }}
+  namespace: {{ $.Values.namespaceAnnotator.namespace }}
+  labels:
+    app: {{ $.Values.namespaceAnnotator.name }}
+    giantswarm.io/service-type: "managed"
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ $.Values.namespaceAnnotator.name }}
+      securityContext:
+        runAsUser: {{ $.Values.namespaceAnnotator.userID }}
+        runAsGroup: {{ $.Values.namespaceAnnotator.groupID }}
+      containers:
+      - name: {{ $.Values.namespaceAnnotator.name }}
+        image: "{{ $.Values.global.image.registry }}/{{ $.Values.namespaceAnnotator.image.name }}:{{ $.Values.namespaceAnnotator.image.tag }}"
+        command:
+        - /bin/sh
+        - -c 
+        - "/usr/local/bin/kubectl annotate namespace {{ .name }} iam.amazonaws.com/permitted={{ .roleRegexp }} --overwrite"
+        resources:
+{{ toYaml $.Values.namespaceAnnotator.resources | indent 10 }}
+      restartPolicy: OnFailure
+  backoffLimit: 4
+---
+{{ end }}
+{{ end }}

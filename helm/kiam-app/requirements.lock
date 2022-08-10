@@ -1,6 +1,0 @@
-dependencies:
-- name: kiam-namespace-annotation
-  repository: ""
-  version: 0.1.0
-digest: sha256:f7ad2113809a79c05bbf7835282b3b5c52921e62b0b8e0de6b59a062385c55dc
-generated: "2021-06-28T11:57:57.728093+02:00"

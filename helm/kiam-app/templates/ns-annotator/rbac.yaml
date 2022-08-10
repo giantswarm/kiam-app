@@ -1,13 +1,11 @@
+{{ if and .Values.namespaceAnnotator.enabled }}
+{{ if gt (len .Values.namespaceAnnotator.namespaces) 0 }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ .Values.name }}
-  annotations:
-    "helm.sh/hook": "post-install"
-    "helm.sh/hook-weight": "-1"
-    "helm.sh/hook-delete-policy": "hook-succeeded,hook-failed"
+  name: {{ .Values.namespaceAnnotator.name }}
   labels:
-    app: {{ .Values.name }}
+    app: {{ .Values.namespaceAnnotator.name }}
     giantswarm.io/service-type: "managed"
 rules:
 - apiGroups:
@@ -15,7 +13,9 @@ rules:
   resources:
   - namespaces
   resourceNames:
-  - kube-system
+  {{- range .Values.namespaceAnnotator.namespaces }}
+  - {{ .name }}
+  {{- end }}
   verbs:
   - "get"
   - "patch"
@@ -24,26 +24,28 @@ rules:
   resources:
   - podsecuritypolicies
   resourceNames:
-  - {{ .Values.name }}
+  - {{ .Values.namespaceAnnotator.name }}
   verbs:
   - "use"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ .Values.name }}
+  name: {{ .Values.namespaceAnnotator.name }}
   annotations:
     "helm.sh/hook": "post-install"
     "helm.sh/hook-weight": "-2"
     "helm.sh/hook-delete-policy": "hook-succeeded,hook-failed"
   labels:
-    app: {{ .Values.name }}
+    app: {{ .Values.namespaceAnnotator.name }}
     giantswarm.io/service-type: "managed"
 subjects:
   - kind: ServiceAccount
-    name: {{ .Values.name }}
-    namespace: {{ .Values.namespace }}
+    name: {{ .Values.namespaceAnnotator.name }}
+    namespace: {{ .Values.namespaceAnnotator.namespace }}
 roleRef:
   kind: Role
-  name: {{ .Values.name }}
+  name: {{ .Values.namespaceAnnotator.name }}
   apiGroup: rbac.authorization.k8s.io
+{{ end }}
+{{ end }}
