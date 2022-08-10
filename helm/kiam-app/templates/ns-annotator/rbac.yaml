@@ -24,7 +24,9 @@ rules:
   resources:
   - podsecuritypolicies
   resourceNames:
-  - {{ .Values.namespaceAnnotator.name }}
+  {{- range .Values.namespaceAnnotator.namespaces }}
+  - "{{ $.Values.namespaceAnnotator.name }}-{{ .name }}"
+  {{- end }}
   verbs:
   - "use"
 ---
@@ -32,10 +34,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ .Values.namespaceAnnotator.name }}
-  annotations:
-    "helm.sh/hook": "post-install"
-    "helm.sh/hook-weight": "-2"
-    "helm.sh/hook-delete-policy": "hook-succeeded,hook-failed"
   labels:
     app: {{ .Values.namespaceAnnotator.name }}
     giantswarm.io/service-type: "managed"
