@@ -4,6 +4,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: {{ .Values.namespaceAnnotator.name }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
   labels:
     app: {{ .Values.namespaceAnnotator.name }}
     giantswarm.io/service-type: "managed"
@@ -34,6 +37,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ .Values.namespaceAnnotator.name }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
   labels:
     app: {{ .Values.namespaceAnnotator.name }}
     giantswarm.io/service-type: "managed"
