@@ -118,8 +118,7 @@ namespaceAnnotator:
   name: kiam-namespace-annotation
   namespace: kube-system
 
-  namespaces: []
-  ciuao:
+  namespaces:
   - name: kube-system
     roleRegexp: .*
 
