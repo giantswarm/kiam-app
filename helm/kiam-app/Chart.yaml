@@ -4,6 +4,6 @@ version: [[ .Version ]]
 appVersion: "4.2"
 description: Integrate AWS IAM with Kubernetes
 home: https://github.com/uswitch/kiam
-icon: https://user-images.githubusercontent.com/44974642/63503185-ee2ce880-c4c6-11e9-9a65-c398db914289.png
+icon: https://s.giantswarm.io/app-icons/kiam/1/dark.svg
 annotations:
   application.giantswarm.io/team: "phoenix"
