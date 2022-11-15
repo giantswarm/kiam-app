@@ -51,7 +51,7 @@ agent:
       memory: 50Mi
 
   # agent whitelist of proxy routes matching this reg-ex
-  whiteListRouteRegexp: /latest/meta-data/placement/availability-zone
+  whiteListRouteRegexp: "/latest/*"
 
   verticalPodAutoscaler:
     enabled: true
