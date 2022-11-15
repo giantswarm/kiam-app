@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Fixed
+
+- Allow `whiteListRouteRegexp` to default to `/latest/*`.
+
 ## [2.5.0] - 2022-08-10
 
 ## [2.4.0] - 2022-08-09
