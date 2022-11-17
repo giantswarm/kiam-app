@@ -138,13 +138,13 @@ namespaceAnnotator:
 
 # set the HTTP_PROXY, HTTPS_PROXY and NO_PROXY variable
 proxy:
-  noProxy:
-  http:
-  https:
+  noProxy: null
+  http: null
+  https: null
 cluster:
   # is getting overwritten by the top level proxy if set
   # These values are generated via cluster-apps-operator
   proxy:
-    noProxy:
-    http:
-    https:
+    noProxy: null
+    http: null
+    https: null
