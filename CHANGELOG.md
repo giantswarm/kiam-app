@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+- Support for running behind a proxy.
+  - `HTTP_PROXY`,`HTTPS_PROXY` and `NO_PROXY` are set as environment variables in deployment if defined in `values.yaml`.
+- Support for using `cluster-apps-operator` specific `cluster.proxy` values.
+
 ## [2.5.1] - 2022-11-15
 
 ### Fixed
