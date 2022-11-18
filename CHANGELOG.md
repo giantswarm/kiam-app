@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [2.6.0] - 2022-11-18
+
 - Support for running behind a proxy.
   - `HTTP_PROXY`,`HTTPS_PROXY` and `NO_PROXY` are set as environment variables in deployment if defined in `values.yaml`.
 - Support for using `cluster-apps-operator` specific `cluster.proxy` values.
@@ -191,7 +193,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - `kiam` upstream helm chart `v3.4`
 
-[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v2.5.1...HEAD
+[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v2.6.0...HEAD
+[2.6.0]: https://github.com/giantswarm/kiam-app/compare/v2.5.1...v2.6.0
 [2.5.1]: https://github.com/giantswarm/kiam-app/compare/v2.5.0...v2.5.1
 [2.5.0]: https://github.com/giantswarm/kiam-app/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/giantswarm/kiam-app/compare/v2.3.0...v2.4.0
