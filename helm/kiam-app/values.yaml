@@ -148,3 +148,6 @@ cluster:
     noProxy: null
     http: null
     https: null
+
+ciliumNetworkPolicy:
+  enabled: false

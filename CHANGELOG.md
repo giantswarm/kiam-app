@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Added
+
+- Add `Cilium Network Policy` for kiam.
+
 ## [2.6.0] - 2022-11-18
 
 - Support for running behind a proxy.
