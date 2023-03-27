@@ -26,6 +26,7 @@ agent:
     caFileName: ca.crt
 
   host:
+    iptables: false
     port: 8181
     interface: "!eth0"
 

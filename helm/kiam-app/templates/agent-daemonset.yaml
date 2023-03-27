@@ -48,7 +48,9 @@ spec:
             - /kiam
             - agent
           args:
+            {{- if .Values.agent.host.iptables }}
             - --iptables
+            {{- end }}
             - --host-interface={{ .Values.agent.host.interface }}
             - --json-log
             - --level={{ .Values.agent.log.level }}

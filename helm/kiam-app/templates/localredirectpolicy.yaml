@@ -1,0 +1,19 @@
+apiVersion: cilium.io/v2
+kind: CiliumLocalRedirectPolicy
+metadata:
+  name: {{ .Values.agent.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  redirectBackend:
+    localEndpointSelector:
+      matchLabels:
+        {{- include "labels.selector.agent" . | nindent 6 }}
+    toPorts:
+    - port: {{ .Values.agent.host.port}}
+      protocol: TCP
+  redirectFrontend:
+    addressMatcher:
+      ip: 169.254.169.254
+      toPorts:
+      - port: "80"
+        protocol: TCP
