@@ -16,13 +16,13 @@ spec:
             component: kiam-agent
       toPorts:
         - ports:
-            - port: {{ .Values.server.service.targetPort }}
+            - port: "{{ .Values.server.service.targetPort }}"
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: prometheus
       toPorts:
         - ports:
-            - port: {{ .Values.server.prometheus.port }}
+            - port: "{{ .Values.server.prometheus.port }}"
   egress:
     - toCIDRSet:
         - cidr: 169.254.169.254/32

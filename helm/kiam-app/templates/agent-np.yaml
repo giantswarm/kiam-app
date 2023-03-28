@@ -16,13 +16,13 @@ spec:
         - cluster
       toPorts:
         - ports:
-            - port: {{ .Values.agent.host.port }}
+            - port: "{{ .Values.agent.host.port }}"
     - fromEndpoints:
         - matchLabels:
             app.kubernetes.io/name: prometheus
       toPorts:
         - ports:
-            - port: {{ .Values.agent.prometheus.port }}
+            - port: "{{ .Values.agent.prometheus.port }}"
   egress:
     - toEndpoints:
         - matchLabels:
@@ -30,7 +30,7 @@ spec:
             component: kiam-server
       toPorts:
         - ports:
-            - port: {{ .Values.server.service.targetPort }}
+            - port: "{{ .Values.server.service.targetPort }}"
     - toServices:
         - k8sServiceSelector:
             selector:
