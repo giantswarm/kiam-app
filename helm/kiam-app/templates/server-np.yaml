@@ -24,11 +24,8 @@ spec:
         - ports:
             - port: "{{ .Values.server.prometheus.port }}"
   egress:
-    - toCIDRSet:
-        - cidr: 169.254.169.254/32
-      toPorts:
-        - ports:
-            - port: "80"
+    - toEntities:
+        - world
     - toEndpoints:
         - matchLabels:
             k8s-app: coredns
