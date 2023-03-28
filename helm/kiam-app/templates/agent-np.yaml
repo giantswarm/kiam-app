@@ -1,5 +1,5 @@
-kind: NetworkPolicy
-apiVersion: networking.k8s.io/v1
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
 metadata:
   name: {{ .Values.agent.name }}
   namespace: {{ .Release.Namespace }}
@@ -8,28 +8,34 @@ metadata:
     component: {{ .Values.agent.name }}
     giantswarm.io/service-type: "managed"
 spec:
-  podSelector:
+  endpointSelector:
     matchLabels:
       {{- include "labels.selector.agent" . | nindent 6 }}
-  policyTypes:
-  - Ingress
-  - Egress
   ingress:
-  - ports:
-    - port: {{ .Values.agent.prometheus.port }}
-      protocol: TCP
-    from:
-    - ipBlock:
-        cidr: 10.0.0.0/8
-    - ipBlock:
-        cidr: 172.16.0.0/12
-    - ipBlock:
-        cidr: 192.168.0.0/16
+    - fromEntities:
+        - cluster
+      toPorts:
+        - ports:
+            - port: {{ .Values.agent.host.port }}
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: {{ .Values.agent.prometheus.port }}
   egress:
-  - to:
-    - ipBlock:
-        cidr: 10.0.0.0/8
-    - ipBlock:
-        cidr: 172.16.0.0/12
-    - ipBlock:
-        cidr: 192.168.0.0/16
+    - toEndpoints:
+        - matchLabels:
+            app: kiam
+            component: kiam-server
+      toPorts:
+        - ports:
+            - port: {{ .Values.server.service.targetPort }}
+    - toServices:
+        - k8sServiceSelector:
+            selector:
+              matchLabels:
+                k8s-app: coredns
+      toPorts:
+        - ports:
+            - port: "53"

@@ -1,37 +1,38 @@
-kind: NetworkPolicy
-apiVersion: networking.k8s.io/v1
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
 metadata:
   name: {{ .Values.server.name }}
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "labels.server" . | nindent 4 }}
 spec:
-  podSelector:
+  endpointSelector:
     matchLabels:
       {{- include "labels.selector.server" . | nindent 6 }}
-  policyTypes:
-  - Ingress
-  - Egress
   ingress:
-  - ports:
-    - port: {{ .Values.server.service.targetPort }}
-      protocol: TCP
-    from:
-    - ipBlock:
-        cidr: 10.0.0.0/8
-    - ipBlock:
-        cidr: 172.16.0.0/12
-    - ipBlock:
-        cidr: 192.168.0.0/16
-  - ports:
-    - port: {{ .Values.server.prometheus.port }}
-      protocol: TCP
-    from:
-    - ipBlock:
-        cidr: 10.0.0.0/8
-    - ipBlock:
-        cidr: 172.16.0.0/12
-    - ipBlock:
-        cidr: 192.168.0.0/16
+    - fromEndpoints:
+        - matchLabels:
+            app: kiam
+            component: kiam-agent
+      toPorts:
+        - ports:
+            - port: {{ .Values.server.service.targetPort }}
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+      toPorts:
+        - ports:
+            - port: {{ .Values.server.prometheus.port }}
   egress:
-  - {}
+    - toCIDRSet:
+        - cidr: 169.254.169.254/32
+      toPorts:
+        - ports:
+            - port: "80"
+    - toEndpoints:
+        - matchLabels:
+            k8s-app: coredns
+            io.kubernetes.pod.namespace: kube-system
+      toPorts:
+        - ports:
+            - port: "53"
