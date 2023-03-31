@@ -1,3 +1,4 @@
+//go:build k8srequired
 // +build k8srequired
 
 package basic
@@ -20,8 +21,8 @@ const (
 	appName            = "kiam-app"
 	certManagerName    = "cert-manager-app"
 	certManagerVersion = "2.3.3"
-	defaultCatalog     = "default"
-	defaultTestCatalog = "default-test"
+	defaultCatalog     = "giantswarm"
+	defaultTestCatalog = "giantswarm-test"
 	kiamAgent          = "kiam-agent"
 	kiamServer         = "kiam-server"
 )
