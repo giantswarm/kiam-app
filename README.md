@@ -4,6 +4,8 @@
 
 Helm chart for [kiam] service running in tenant clusters.
 
+Release 2.x is only supported on GS release 19.x with Cilium CNI.
+
 ## Installing the Chart
 
 To install the chart locally:

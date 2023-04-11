@@ -7,9 +7,10 @@ workflows:
   build:
     jobs:
       - architect/push-to-app-catalog:
-          name: push-to-default-app-catalog
-          app_catalog: "default-catalog"
-          app_catalog_test: "default-test-catalog"
+          context: architect
+          name: push-to-giantswarm-app-catalog
+          app_catalog: "giantswarm-catalog"
+          app_catalog_test: "giantswarm-test-catalog"
           chart: "kiam-app"
           filters:
             # Trigger the job also on git tag.
@@ -27,4 +28,4 @@ workflows:
               ignore:
                 - master
           requires:
-            - push-to-default-app-catalog
+            - push-to-giantswarm-app-catalog

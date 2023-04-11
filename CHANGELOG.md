@@ -7,6 +7,13 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Added
+
+- Allow running without iptables mode
+- Add cilium local redirect policy
+- Move to Cilium Network Policies
+- Move to main catalog
+
 ## [2.6.0] - 2022-11-18
 
 - Support for running behind a proxy.
