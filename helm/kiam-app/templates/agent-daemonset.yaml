@@ -18,7 +18,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       serviceAccountName: {{ .Values.agent.name }}
       nodeSelector:
-        kubernetes.io/role: worker
+        role: worker
       tolerations:
         # Make sure kiam agent gets scheduled on all worker nodes. Ignoring all taints.
         - effect: NoSchedule
