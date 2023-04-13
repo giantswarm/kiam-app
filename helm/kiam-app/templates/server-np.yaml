@@ -10,26 +10,10 @@ spec:
     matchLabels:
       {{- include "labels.selector.server" . | nindent 6 }}
   ingress:
-    - fromEndpoints:
-        - matchLabels:
-            app: kiam
-            component: kiam-agent
-      toPorts:
-        - ports:
-            - port: "{{ .Values.server.service.targetPort }}"
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: prometheus
-      toPorts:
-        - ports:
-            - port: "{{ .Values.server.prometheus.port }}"
+    - fromEntities:
+        - cluster
+        - world
   egress:
     - toEntities:
+        - cluster
         - world
-    - toEndpoints:
-        - matchLabels:
-            k8s-app: coredns
-            io.kubernetes.pod.namespace: kube-system
-      toPorts:
-        - ports:
-            - port: "53"
