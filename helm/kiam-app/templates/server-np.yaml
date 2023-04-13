@@ -13,12 +13,6 @@ spec:
     - fromEntities:
         - cluster
         - world
-      toPorts:
-        - ports:
-            - port: "{{ .Values.server.service.targetPort }}"
-      toPorts:
-        - ports:
-            - port: "{{ .Values.server.prometheus.port }}"
   egress:
     - toEntities:
         - cluster
