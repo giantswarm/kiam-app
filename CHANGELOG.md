@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [3.1.0] - 2023-04-13
+
 ### Changed
 
 - Improve CiliumNetworkPolicies.
@@ -206,7 +208,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - `kiam` upstream helm chart `v3.4`
 
-[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/giantswarm/kiam-app/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/giantswarm/kiam-app/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/giantswarm/kiam-app/compare/v2.6.0...v3.0.0
 [2.6.0]: https://github.com/giantswarm/kiam-app/compare/v2.5.1...v2.6.0
 [2.5.1]: https://github.com/giantswarm/kiam-app/compare/v2.5.0...v2.5.1
