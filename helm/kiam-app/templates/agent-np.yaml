@@ -17,25 +17,8 @@ spec:
       toPorts:
         - ports:
             - port: "{{ .Values.agent.host.port }}"
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: prometheus
-      toPorts:
         - ports:
             - port: "{{ .Values.agent.prometheus.port }}"
   egress:
-    - toEndpoints:
-        - matchLabels:
-            app: kiam
-            component: kiam-server
-      toPorts:
-        - ports:
-            - port: "{{ .Values.server.service.targetPort }}"
-    - toServices:
-        - k8sServiceSelector:
-            selector:
-              matchLabels:
-                k8s-app: coredns
-      toPorts:
-        - ports:
-            - port: "53"
+    - toEntities:
+        - cluster
