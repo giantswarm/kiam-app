@@ -4,9 +4,7 @@ metadata:
   name: {{ .Values.agent.name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Values.name }}
-    component: {{ .Values.agent.name }}
-    giantswarm.io/service-type: "managed"
+    {{- include "labels.agent" . | nindent 4 }}
 spec:
   podSelector:
     matchLabels:
@@ -20,3 +18,4 @@ spec:
       protocol: TCP
   egress:
   - {}
+
