@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/giantswarm/kiam-app.svg?style=shield)](https://circleci.com/gh/giantswarm/kiam-app)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/giantswarm/kiam-app/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/giantswarm/kiam-app/tree/master)
 
 # kiam-app
 
