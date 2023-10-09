@@ -108,6 +108,8 @@ image:
 global:
   image:
     registry: docker.io
+  podSecurityStandards:
+    enforced: false
 
 # placeholder, value taken from default-appcatalog-values.yaml
 kiam:
