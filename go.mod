@@ -3,10 +3,11 @@ module github.com/giantswarm/kiam-app
 go 1.14
 
 require (
-	github.com/giantswarm/apptest v1.1.0
+	github.com/Azure/go-autorest/autorest v0.11.12 // indirect
+	github.com/giantswarm/apptest v1.3.0
 	github.com/giantswarm/backoff v1.0.0
-	github.com/giantswarm/microerror v0.4.0
-	github.com/giantswarm/micrologger v0.6.0
-	k8s.io/apimachinery v0.21.4
-	sigs.k8s.io/controller-runtime v0.9.7 // indirect
+	github.com/giantswarm/microerror v0.4.1
+	github.com/giantswarm/micrologger v1.1.1
+	github.com/go-openapi/spec v0.19.5 // indirect
+	k8s.io/apimachinery v0.26.0
 )
